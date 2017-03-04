@@ -1,8 +1,10 @@
 import React from "react"
 import styles from "../styles/styles.css"
 import NavBar from "../components/navBar"
-import { Table, FormControl, FormGroup, Button } from "react-bootstrap"
+import { Button, Modal } from "react-bootstrap"
 import Firebase from "../firebase/firebase"
+import LessonTable from "../components/LessonTable"
+import LessonCreator from "../components/LessonCreator"
 
 class LessonView extends React.Component {
   constructor(props) {
@@ -11,11 +13,11 @@ class LessonView extends React.Component {
     this.state = {
       currentMonth: "January",
       grade: props.params.grade,
-      file: null
+      file: null,
+      shouldShowCreateView: false
     }
     this.firebase = new Firebase()
 
-    this.changeMonth = this.changeMonth.bind(this)
     switch(this.state.grade) {
       case "Kindergarten":
         this.backgroundColor = "light-yellow"
@@ -36,11 +38,49 @@ class LessonView extends React.Component {
         this.backgroundColor = "light-blue"
         break
     }
-    this.upload = this.upload.bind(this)
+
+    this.changeMonth = this.changeMonth.bind(this)
+    this.currentView = this.currentView.bind(this)
+    this.toggleCreate = this.toggleCreate.bind(this)
+    this.filePicked = this.filePicked.bind(this)
+    this.uploadToFirebase = this.uploadToFirebase.bind(this)
+    this.buttonText = this.buttonText.bind(this)
   }
 
-  upload() {
+  uploadToFirebase() {
     this.firebase.upload(this.state.file)
+  }
+
+  filePicked(file) {
+    this.setState({file: file})
+  }
+
+  currentView() {
+    return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} file={this.state.file} filePicked={this.filePicked} /> : <LessonTable />
+  }
+
+  toggleCreate() {
+    this.state.shouldShowCreateView ? this.setState({shouldShowCreateView: false}) : this.setState({shouldShowCreateView: true})
+  }
+
+  buttonText() {
+    return this.state.shouldShowCreateView ? "Cancel" : "Add a Lesson"
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="row">
+          <NavBar showMonths={true} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
+        </div>
+        <div className="nav-top-margin row grade-btn-padding">
+          <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+        </div>
+        <div className={`${this.backgroundColor} row`}>
+          {this.currentView()}
+        </div>
+      </div>
+    )
   }
 
   changeMonth(eventKey) {
@@ -84,36 +124,6 @@ class LessonView extends React.Component {
         break
       default: break
     }
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="row">
-          <NavBar showMonths={true} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
-        </div>
-        <div className={`${this.backgroundColor} nav-top-margin row`}>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Test Header</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Test data</td>
-                <td>
-                  <FormGroup bsSize="large" controlId="upload">
-                    <FormControl type="file" onChange={({target}) => { this.state.file = target.files}}/>
-                  </FormGroup>
-                </td>
-                <td><Button onClick={this.upload}>Upload</Button></td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-      </div>
-    )
   }
 }
 

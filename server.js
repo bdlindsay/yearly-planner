@@ -20,7 +20,7 @@ app.use(webpackHotMiddleware(compiler));
 app.set('view engine', 'pug');
 app.set('views', 'public')
 
-app.use('/', (req, res) => {
+app.use('/*', (req, res) => {
   res.render('index', {title: "Yearly Planner"})
 })
 

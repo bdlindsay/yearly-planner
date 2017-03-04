@@ -21,6 +21,25 @@
   transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.btn.add {
+  background-color: black;
+  color: white;
+}
+
+.btn.add:hover {
+  background-color: #1d1d1e;
+  color: white;
+}
+
+.btn.add:active {
+  background-color: #3b3b3d;
+  color: white;
+}
+
+.btn.add:focus {
+  outline: 0;
+}
+
 .grade-btn:active {
   transform: translateY(4px);
 }
