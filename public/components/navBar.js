@@ -1,5 +1,5 @@
 import React from "react"
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from "react-bootstrap"
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Grid, Row, Col } from "react-bootstrap"
 import { Link } from "react-router"
 
 const NavBar = ({showMonths, changeMonth, currentMonth}) => {
@@ -24,15 +24,18 @@ const NavBar = ({showMonths, changeMonth, currentMonth}) => {
     }
   }
   return (
-    <Navbar inverse fixedTop fluid>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <Link to="/">Yearly Planner</Link>
-        </Navbar.Brand>
-      </Navbar.Header>
-      <Nav>
-        {optionalNavDropdown()}
-      </Nav>
+    <Navbar inverse fixedTop fluid collapseOnSelect>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/">Yearly Planner</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+        <Nav>
+          {optionalNavDropdown()}
+        </Nav>
+        </Navbar.Collapse>
     </Navbar>
   )
 }

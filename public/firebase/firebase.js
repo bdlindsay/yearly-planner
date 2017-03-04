@@ -15,6 +15,7 @@ class Firebase {
     // avoid using # [ ] * ?
     firebase.auth().signInAnonymously().then( response => {
       console.log("success unauth login: ", response)
+      this.download()
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -23,16 +24,32 @@ class Firebase {
     });
 
     this.storageReference = firebase.storage().ref()
-    this.files = this.storageReference.child("files")
+    this.download = this.download.bind(this)
   }
 
-  upload(file) {
-    console.log(file)
-    console.log(file[0].name)
-    this.files.put(file[0]).then( snapshot => {
+  upload(lessonObject) {
+    const blob = new Blob([JSON.stringify(lessonObject)], {type : 'application/json'});
+
+    const newLessonReference = this.storageReference.child(`lessons/${lessonObject.lessonName}.json`)
+
+    newLessonReference.put(blob).then( snapshot => {
       console.log("Uploaded ", snapshot)
     }).catch( error => {
       console.error(error)
+    })
+    // console.log(file)
+    // console.log(file[0].name)
+    // this.files.put(file[0]).then( snapshot => {
+    //   console.log("Uploaded ", snapshot)
+    // }).catch( error => {
+    //   console.error(error)
+    // })
+  }
+
+  download() {
+    let lessonsPath = this.storageReference.child("lessons/My first grade object.json")
+    lessonsPath.getDownloadURL().then( url => {
+        // TODO do an agent.get call to url - parse json
     })
   }
 }

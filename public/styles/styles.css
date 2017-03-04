@@ -6,6 +6,11 @@
   padding: 20px;
 }
 
+.form-margin {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .grade-btn {
   font-family: "Tahoma";
   font-size: 400% !important;
