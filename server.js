@@ -18,11 +18,11 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler));
 
 app.set('view engine', 'pug');
-app.set('views', 'public')
+app.set('views', 'public');
 
-app.use('/*', (req, res) => {
+app.get('/*', (req, res) => {
   res.render('index', {title: "Yearly Planner"})
-})
+});
 
 app.use(express.static('build'));
 

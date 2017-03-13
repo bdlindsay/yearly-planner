@@ -18,13 +18,13 @@ class Home extends React.Component {
         <div className="row">
           <NavBar showMonths={false} />
         </div>
-        <div className="nav-top-margin row vertical-center">
+        <div className="nav-top-margin row">
           <div className="row">
             <div className="col-md-4 grade-btn-padding">
               <center><Link to="/lessons/Kindergarten">
                 <Button
                   id={0}
-                  bsClass="btn grade-btn yellow"
+                  bsClass="btn grade-btn yellow "
                   bsSize="large"
                   onClick={this.state.gradeSelect}>
                   Kindergarten

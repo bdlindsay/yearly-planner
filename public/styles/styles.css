@@ -1,5 +1,5 @@
 .nav-top-margin {
-  margin-top: 50px;
+  margin-top: 5%;
 }
 
 .grade-btn-padding {
@@ -13,8 +13,9 @@
 
 .grade-btn {
   font-family: "Tahoma";
-  font-size: 400% !important;
-  padding: 20px;
+  font-size: 4vw;
+  padding-top: 20%;
+  padding-bottom: 20%;
   width: 80%;
 
   border: 0 solid;
@@ -62,7 +63,7 @@
 }
 
 .red {
-  background-color: #ef5350;
+  background-color: #d60a0a;
 }
 
 .purple {
@@ -148,10 +149,6 @@
 
 .light-blue {
   background-color: #e3f2fd;
-}
-
-.vertical-center {
-  margin-top: 10%;
 }
 
 a, a:hover {

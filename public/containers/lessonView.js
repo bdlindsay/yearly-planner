@@ -13,9 +13,7 @@ class LessonView extends React.Component {
     this.state = {
       currentMonth: "January",
       grade: props.params.grade,
-      shouldShowCreateView: false,
-      files: [],
-      lessonName: ""
+      shouldShowCreateView: false
     }
     this.firebase = new Firebase()
 
@@ -43,42 +41,22 @@ class LessonView extends React.Component {
     this.changeMonth = this.changeMonth.bind(this)
     this.currentView = this.currentView.bind(this)
     this.toggleCreate = this.toggleCreate.bind(this)
-    this.filePicked = this.filePicked.bind(this)
     this.uploadToFirebase = this.uploadToFirebase.bind(this)
     this.buttonText = this.buttonText.bind(this)
-    this.handleChange = this.handleChange.bind(this)
   }
 
-  uploadToFirebase() {
-    for (let file of this.state.files) {
+  uploadToFirebase(uploadObject) {
+    for (const file of uploadObject.files) {
       console.log("Uploading" + JSON.stringify(file))
       //this.firebase.upload(file)
     }
-    const uploadObject = {
-      lessonName: this.state.lessonName,
-      files: this.state.files,
-      curriculum: "placeholder curriculum",
-      type: "placeholder type",
-      grade: this.state.grade
-    }
-    console.log("Uploading" + JSON.stringify(uploadObject))
-    this.firebase.upload(uploadObject)
-  }
 
-  filePicked(file) {
-    let newFiles = this.state.files
-    newFiles.push(file)
-    this.setState({files: newFiles}, () => {
-      console.log(this.state.files)
-    })
-  }
-
-  handleChange({target}) {
-    this.setState({lessonName: target.value})
+    console.log("Fake Uploading" + JSON.stringify(uploadObject))
+    //this.firebase.upload(uploadObject)
   }
 
   currentView() {
-    return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} files={this.state.files} handleChange={this.handleChange} filePicked={this.filePicked} backgroundColor={this.backgroundColor} /> : <LessonTable />
+    return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable />
   }
 
   toggleCreate() {
@@ -93,7 +71,7 @@ class LessonView extends React.Component {
     return (
       <div>
         <div className="row">
-          <NavBar showMonths={true} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
+          <NavBar showMonths={!this.state.shouldShowCreateView} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
         </div>
         <div className="nav-top-margin row grade-btn-padding">
           <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
