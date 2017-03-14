@@ -13,7 +13,8 @@ class LessonView extends React.Component {
         this.state = {
           currentMonth: "January",
           grade: props.params.grade,
-          shouldShowCreateView: false
+          shouldShowCreateView: false,
+          lessons: []
         }
         this.firebase = new Firebase()
 
@@ -44,9 +45,11 @@ class LessonView extends React.Component {
         this.uploadToFirebase = this.uploadToFirebase.bind(this)
         this.buttonText = this.buttonText.bind(this)
     }
+    
     componentWillMount() {
         this.firebase.downloadLessons().then( lessons => {
             console.log(lessons.val())
+            this.setState({lessons: lessons.val()})
         })
     }
 
@@ -56,12 +59,12 @@ class LessonView extends React.Component {
             //this.firebase.upload(file)
         }
 
-        console.log("Fake Uploading" + JSON.stringify(uploadObject))
+        console.log("Uploading" + JSON.stringify(uploadObject))
         this.firebase.upload(uploadObject) // TODO callback for when it has successfully uploaded?
     }
 
     currentView() {
-        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable />
+        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.state.lessons} />
     }
 
     toggleCreate() {

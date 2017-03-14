@@ -117,7 +117,7 @@ class LessonCreator extends React.Component {
                   </Row>
                   <Row className="form-margin">
                       <Col md={12}>
-                          <ControlLabel draggable={true}>Lesson Source</ControlLabel>
+                          <ControlLabel>Lesson Source</ControlLabel>
                           <FormControl type="text" placeholder="Source" onChange={this.handleChange.bind(this, "lessonSource")}/>
                       </Col>
                   </Row>

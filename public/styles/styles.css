@@ -1,5 +1,5 @@
 .nav-top-margin {
-  margin-top: 5%;
+  margin-top: 3%;
 }
 
 .grade-btn-padding {
@@ -48,6 +48,10 @@
 
 .grade-btn:active {
   transform: translateY(4px);
+}
+
+.white {
+    background-color: #fff;
 }
 
 .yellow {
