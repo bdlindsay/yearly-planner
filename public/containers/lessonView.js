@@ -7,81 +7,86 @@ import LessonTable from "../components/LessonTable"
 import LessonCreator from "../components/LessonCreator"
 
 class LessonView extends React.Component {
-  constructor(props) {
-    super()
+    constructor(props) {
+        super()
 
-    this.state = {
-      currentMonth: "January",
-      grade: props.params.grade,
-      shouldShowCreateView: false
+        this.state = {
+          currentMonth: "January",
+          grade: props.params.grade,
+          shouldShowCreateView: false
+        }
+        this.firebase = new Firebase()
+
+        switch(this.state.grade) {
+          case "Kindergarten":
+            this.backgroundColor = "light-yellow"
+            break
+          case "1stGrade":
+            this.backgroundColor = "light-green"
+            break
+          case "2ndGrade":
+            this.backgroundColor = "light-orange"
+            break
+          case "3rdGrade":
+            this.backgroundColor = "light-red"
+            break
+          case "4thGrade":
+            this.backgroundColor = "light-purple"
+            break
+          case "5thGrade":
+            this.backgroundColor = "light-blue"
+            break
+        }
+
+        this.changeMonth = this.changeMonth.bind(this)
+        this.currentView = this.currentView.bind(this)
+        this.toggleCreate = this.toggleCreate.bind(this)
+        this.uploadToFirebase = this.uploadToFirebase.bind(this)
+        this.buttonText = this.buttonText.bind(this)
     }
-    this.firebase = new Firebase()
-
-    switch(this.state.grade) {
-      case "Kindergarten":
-        this.backgroundColor = "light-yellow"
-        break
-      case "1stGrade":
-        this.backgroundColor = "light-green"
-        break
-      case "2ndGrade":
-        this.backgroundColor = "light-orange"
-        break
-      case "3rdGrade":
-        this.backgroundColor = "light-red"
-        break
-      case "4thGrade":
-        this.backgroundColor = "light-purple"
-        break
-      case "5thGrade":
-        this.backgroundColor = "light-blue"
-        break
+    componentWillMount() {
+        this.firebase.downloadLessons().then( lessons => {
+            console.log(lessons.val())
+        })
     }
 
-    this.changeMonth = this.changeMonth.bind(this)
-    this.currentView = this.currentView.bind(this)
-    this.toggleCreate = this.toggleCreate.bind(this)
-    this.uploadToFirebase = this.uploadToFirebase.bind(this)
-    this.buttonText = this.buttonText.bind(this)
-  }
+    uploadToFirebase(uploadObject) {
+        for (const file of uploadObject.files) {
+            console.log("Uploading" + JSON.stringify(file))
+            //this.firebase.upload(file)
+        }
 
-  uploadToFirebase(uploadObject) {
-    for (const file of uploadObject.files) {
-      console.log("Uploading" + JSON.stringify(file))
-      //this.firebase.upload(file)
+        console.log("Fake Uploading" + JSON.stringify(uploadObject))
+        this.firebase.upload(uploadObject) // TODO callback for when it has successfully uploaded?
     }
 
-    console.log("Fake Uploading" + JSON.stringify(uploadObject))
-    //this.firebase.upload(uploadObject)
-  }
+    currentView() {
+        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable />
+    }
 
-  currentView() {
-    return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable />
-  }
+    toggleCreate() {
+        this.state.shouldShowCreateView ? this.setState({shouldShowCreateView: false}) : this.setState({shouldShowCreateView: true})
+    }
 
-  toggleCreate() {
-    this.state.shouldShowCreateView ? this.setState({shouldShowCreateView: false}) : this.setState({shouldShowCreateView: true})
-  }
+    buttonText() {
+        return this.state.shouldShowCreateView ? "Cancel" : "Add a Lesson"
+    }
 
-  buttonText() {
-    return this.state.shouldShowCreateView ? "Cancel" : "Add a Lesson"
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="row">
-          <NavBar showMonths={!this.state.shouldShowCreateView} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
-        </div>
-        <div className="nav-top-margin row grade-btn-padding">
-          <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
-        </div>
-        <div className={`${this.backgroundColor} row`}>
-          {this.currentView()}
-        </div>
-      </div>
-    )
-  }
+    render() {
+        return (
+          <div>
+            <div className="row">
+              <NavBar showMonths={!this.state.shouldShowCreateView} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
+            </div>
+            <div className="nav-top-margin row grade-btn-padding">
+              <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+            </div>
+            <div className={`${this.backgroundColor} row`}>
+              {this.currentView()}
+            </div>
+          </div>
+        )
+    }
 
   changeMonth(eventKey) {
     console.log(eventKey)

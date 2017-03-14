@@ -16,12 +16,6 @@ class Firebase {
     // avoid using # [ ] * ?
     firebase.auth().signInAnonymously().then( response => {
       console.log("success unauth login: ", response)
-      // TODO pass in the selected grade to constructor get it and "all" ref
-      // TODO download the lesson objects from the retrieved urls and display
-    //   this.database.ref("/first").once("value").then( snapshot => {
-    //       console.log(snapshot.val())
-    //   })
-    //   this.download()
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -31,30 +25,41 @@ class Firebase {
 
     this.database = firebase.database()
     this.storageReference = firebase.storage().ref()
-    this.download = this.download.bind(this)
+    this.downloadResource = this.downloadResource.bind(this)
+    this.downloadLessons = this.downloadLessons.bind(this)
   }
 
   upload(lessonObject) {
-    const blob = new Blob([JSON.stringify(lessonObject.files)], {type : 'application/json'});
+      if (lessonObject.files.length > 0) {
+          const newLessonPath = `lessons/${lessonObject.lessonName}`
+          const blob = new Blob([JSON.stringify(lessonObject.files)], {type : 'application/json'});
 
-    const newLessonPath = `lessons/${lessonObject.lessonName}.json`
-    const newLessonReference = this.storageReference.child(newLessonPath)
+          const newLessonReference = this.storageReference.child(newLessonPath)
 
-    newLessonReference.put(blob).then( snapshot => {
-      console.log("Uploaded ", snapshot)
-    }).catch( error => {
-      console.error(error)
-    })
+          newLessonReference.put(blob).then( snapshot => {
+              console.log("Uploaded ", snapshot)
+          }).catch( error => {
+              console.error(error)
+          })
 
-    newLessonReference.getDownloadURL().then( url => {
-        const dbUploadObject = {...lessonObject, files: url}
-        // TODO upload this object to real-time database with newLessonPath
-    })
-    // this.files.put(file[0]).then( snapshot => {
-    //   console.log("Uploaded ", snapshot)
-    // }).catch( error => {
-    //   console.error(error)
-    // })
+          newLessonReference.getDownloadURL().then( url => {
+              const dbUploadObject = {...lessonObject, files: url}
+              // TODO upload this object to real-time database with newLessonPath
+              let newPostKey = this.database.ref().child("lessons").push().key
+              let newLesson = {}
+              newLesson[newPostKey] = dbUploadObject
+
+              return this.database.ref("lessons/").update(newLesson)
+          })
+      } else {
+          const dbUploadObject = {...lessonObject, files: null}
+          // TODO upload this object to real-time database with newLessonPath
+          let newPostKey = this.database.ref().child("lessons").push().key
+          let newLesson = {}
+          newLesson[newPostKey] = dbUploadObject
+
+          return this.database.ref("lessons/").update(newLesson)
+      }
   }
 
   downloadResource(url) {
@@ -65,6 +70,7 @@ class Firebase {
   downloadLessons() {
       // TODO create path to lessons from each grade
       // pass back all the whole object for use by UI
+     return this.database.ref("lessons").once("value")
   }
 }
 

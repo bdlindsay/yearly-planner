@@ -8,6 +8,7 @@ class LessonCreator extends React.Component {
         this.state = {
             files: [],
             lessonName: "",
+            lessonSource: "",
             lessonType: [],
             lessonCurriculum: [],
             gradeLevel: []
@@ -39,6 +40,7 @@ class LessonCreator extends React.Component {
 
         const uploadObject = {
           lessonName: this.state.lessonName,
+          lessonSource: this.state.lessonSource,
           files: this.state.files,
           type: uploadLessonType,
           curriculum: uploadLessonCurriculum,
@@ -56,8 +58,10 @@ class LessonCreator extends React.Component {
       })
     }
 
-    handleChange({target}) {
-      this.setState({lessonName: target.value})
+    handleChange(stateVariable, {target}) {
+        let change = {}
+        change[stateVariable] = target.value
+        this.setState(change)
     }
 
     dropUpload(event) {
@@ -107,8 +111,14 @@ class LessonCreator extends React.Component {
               <FormGroup bsSize="large" controlId="upload">
                   <Row className="form-margin">
                       <Col md={12}>
-                          <ControlLabel draggable={true}>Lesson Name</ControlLabel>
-                          <FormControl type="text" placeholder="Enter the lesson name" onChange={this.handleChange}/>
+                          <ControlLabel>Lesson Name</ControlLabel>
+                          <FormControl type="text" placeholder="Name" onChange={this.handleChange.bind(this, "lessonName")}/>
+                      </Col>
+                  </Row>
+                  <Row className="form-margin">
+                      <Col md={12}>
+                          <ControlLabel draggable={true}>Lesson Source</ControlLabel>
+                          <FormControl type="text" placeholder="Source" onChange={this.handleChange.bind(this, "lessonSource")}/>
                       </Col>
                   </Row>
                   <Row className="form-margin">
