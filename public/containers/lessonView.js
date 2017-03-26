@@ -10,13 +10,32 @@ class LessonView extends React.Component {
     constructor(props) {
         super()
 
+        const listener = (user) => {
+          if (user) {
+            console.log("Signed-in!")
+            //console.log(user)
+            this.isSignedIn = true
+            this.setState({isSignedIn: true})
+          } else {
+            console.log("Signed-out :(")
+            this.isSignedIn = false
+            this.setState({isSignedIn: false, shouldShowCreateView: false})
+          }
+        }
+
+        this.firebase = new Firebase()
+        this.firebase.setAuthenticationListener(listener)
+
         this.state = {
           currentMonth: "January",
           grade: props.params.grade,
           shouldShowCreateView: false,
-          lessons: []
+          lessons: [],
+          isSignedIn: this.isSignedIn,
+          email: "",
+          password: "",
+          hasFailedSignIn: false
         }
-        this.firebase = new Firebase()
 
         switch(this.state.grade) {
           case "Kindergarten":
@@ -44,12 +63,34 @@ class LessonView extends React.Component {
         this.toggleCreate = this.toggleCreate.bind(this)
         this.uploadToFirebase = this.uploadToFirebase.bind(this)
         this.buttonText = this.buttonText.bind(this)
+        // TODO redirects?
+        this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
-    
+
     componentWillMount() {
         this.firebase.downloadLessons().then( lessons => {
             console.log(lessons.val())
             this.setState({lessons: lessons.val()})
+        })
+    }
+
+    handleChange(stateVariable, {target}) {
+        let change = {}
+        change[stateVariable] = target.value
+        this.setState(change)
+    }
+
+    signInWithEmailAndPassword() {
+        this.firebase.authenticate(this.state.email, this.state.password).then( response => {
+            console.log(`${email} was successfully signed-in`)
+            this.setState({isSignedIn: true, password: "" })
+        }).catch(error => {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(`Login Error: ${errorCode}: ${errorMessage}`)
+          this.setState({ hasFailedSignIn: true, password: "" })
         })
     }
 
@@ -85,7 +126,7 @@ class LessonView extends React.Component {
               <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
             </div>
             <div className={`${this.backgroundColor} row`}>
-              {this.currentView()}
+                {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
             </div>
           </div>
         )

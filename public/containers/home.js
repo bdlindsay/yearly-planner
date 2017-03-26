@@ -1,26 +1,68 @@
 import React from "react"
-import { Navbar, Nav, NavItem, Table, Button } from "react-bootstrap"
+import { Navbar, Nav, NavItem, Table, Button, Col, Row } from "react-bootstrap"
 import styles from "../styles/styles.css"
 import { Link } from "react-router"
 import NavBar from "../components/navBar"
 import Firebase from "../firebase/firebase"
 import LessonCreator from "../components/LessonCreator"
+import Login from "../components/Login"
 
 class Home extends React.Component {
   constructor({ gradeSelect }) {
     super();
-    this.state = {
-      gradeSelect: gradeSelect,
-      shouldShowCreateView: false
+
+    const listener = (user) => {
+      if (user) {
+        console.log("Signed-in!")
+        //console.log(user)
+        this.isSignedIn = true
+        this.setState({isSignedIn: true})
+      } else {
+        console.log("Signed-out :(")
+        this.isSignedIn = false
+        this.setState({isSignedIn: false})
+      }
     }
 
     this.firebase = new Firebase()
+    this.firebase.setAuthenticationListener(listener)
+
+    this.state = {
+      gradeSelect: gradeSelect,
+      shouldShowCreateView: false,
+      isSignedIn: this.isSignedIn,
+      email: "",
+      password: "",
+      hasFailedSignIn: false
+    }
 
     this.buttonText = this.buttonText.bind(this)
     this.currentView = this.currentView.bind(this)
     this.gradeButtons = this.gradeButtons.bind(this)
     this.uploadToFirebase = this.uploadToFirebase.bind(this)
     this.toggleCreate = this.toggleCreate.bind(this)
+    // TODO redirects?
+    this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(stateVariable, {target}) {
+      let change = {}
+      change[stateVariable] = target.value
+      this.setState(change)
+  }
+
+  signInWithEmailAndPassword() {
+      this.firebase.authenticate(this.state.email, this.state.password).then( response => {
+          console.log(`${email} was successfully signed-in`)
+          this.setState({isSignedIn: true, password: "" })
+      }).catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(`Login Error: ${errorCode}: ${errorMessage}`)
+        this.setState({ hasFailedSignIn: true, password: "" })
+      })
   }
   // Create view Package
   uploadToFirebase(uploadObject) {
@@ -38,7 +80,14 @@ class Home extends React.Component {
   }
 
   currentView() {
-      return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor="white" /> : this.gradeButtons()
+      return (
+          <div className="nav-top-margin row grade-btn-padding">
+              <Col sm={2} smOffset={10} >
+                <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+              </Col>
+              { this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor="white" /> : this.gradeButtons() }
+          </div>
+      )
   }
 
   toggleCreate() {
@@ -52,10 +101,7 @@ class Home extends React.Component {
         <div className="row">
           <NavBar showMonths={false} />
         </div>
-        <div className="nav-top-margin row grade-btn-padding">
-          <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
-        </div>
-        {this.currentView()}
+            {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
       </div>
     )
   }

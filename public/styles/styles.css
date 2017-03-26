@@ -1,5 +1,5 @@
 .nav-top-margin {
-  margin-top: 3%;
+  margin-top: 4%;
 }
 
 .grade-btn-padding {
@@ -9,6 +9,11 @@
 .form-margin {
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.center-vertically {
+    position: absolute;
+    top: 20%;
 }
 
 .grade-btn {

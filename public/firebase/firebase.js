@@ -14,19 +14,36 @@ class Firebase {
       firebase.initializeApp(config);
     }
     // avoid using # [ ] * ?
-    firebase.auth().signInAnonymously().then( response => {
-      console.log("success unauth login: ", response)
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
+    // firebase.auth().signInAnonymously().then( response => {
+    //   console.log("success unauth login: ", response)
+    // }).catch(function(error) {
+    //   // Handle Errors here.
+    //   var errorCode = error.code;
+    //   var errorMessage = error.message;
+    //   // ...
+    // })
 
     this.database = firebase.database()
     this.storageReference = firebase.storage().ref()
     this.downloadResource = this.downloadResource.bind(this)
     this.downloadLessons = this.downloadLessons.bind(this)
+    this.authenticate = this.authenticate.bind(this)
+    this.signInUser = this.signInUser.bind(this)
+  }
+
+  setAuthenticationListener(listener) {
+      firebase.auth().onAuthStateChanged(listener)
+  }
+
+  authenticate(email, password) {
+      return firebase.auth().signInWithEmailAndPassword(email, password).catch( error => console.log(error))
+  }
+
+  signInUser(firebase) {
+      const user = firebase.auth().currentUser
+      if (user) {
+          return user
+      }
   }
 
   upload(lessonObject) {
