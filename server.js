@@ -3,19 +3,22 @@ var app = express();
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config");
 var compiler = webpack(webpackConfig);
-const webpackHotMiddleware = require("webpack-hot-middleware");
-const webpackDevMiddleware = require("webpack-dev-middleware");
 
-app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
-    publicPath: '/',
-    stats: {
-      colors: true
-    },
-    historyApiFallback: true
-}));
+if (proccess.env.NODE_ENV == "development") {
+    const webpackHotMiddleware = require("webpack-hot-middleware");
+    const webpackDevMiddleware = require("webpack-dev-middleware");
 
-app.use(webpackHotMiddleware(compiler));
+    app.use(webpackDevMiddleware(compiler, {
+        noInfo: true,
+        publicPath: '/',
+        stats: {
+          colors: true
+        },
+        historyApiFallback: true
+    }));
+
+    app.use(webpackHotMiddleware(compiler));
+}
 
 app.set('view engine', 'pug');
 app.set('views', 'public');

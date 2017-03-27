@@ -30,8 +30,9 @@
   },
   "scripts": {
     "firebase": "firebase serve",
-    "dev": "node server.js",
-    "webpack": "webpack -d"
+    "dev": "NOVE_ENV=development node server.js",
+    "webpack": "webpack -d",
+    "start": "NODE_ENV=production node server.js"
   },
   "babel": {
     "presets": [
