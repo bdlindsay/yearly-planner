@@ -30,7 +30,13 @@ class Firebase {
     this.authenticate = this.authenticate.bind(this)
     this.signInUser = this.signInUser.bind(this)
   }
-
+  signOut() {
+      firebase.auth().signOut().then( () => {
+          console.log("signed out")
+      }).catch ( error => {
+          console.log(`Error: ${error}`)
+      })
+  }
   setAuthenticationListener(listener) {
       firebase.auth().onAuthStateChanged(listener)
   }

@@ -1,10 +1,11 @@
 import React from "react"
 import styles from "../styles/styles.css"
 import NavBar from "../components/navBar"
-import { Button, Modal } from "react-bootstrap"
+import { Button, Modal, Row, Col } from "react-bootstrap"
 import Firebase from "../firebase/firebase"
 import LessonTable from "../components/LessonTable"
 import LessonCreator from "../components/LessonCreator"
+import Login from "../components/Login"
 
 class LessonView extends React.Component {
     constructor(props) {
@@ -123,7 +124,12 @@ class LessonView extends React.Component {
               <NavBar showMonths={!this.state.shouldShowCreateView} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
             </div>
             <div className="nav-top-margin row grade-btn-padding">
-              <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+                <Col sm={2}>
+                    <Button onClick={this.firebase.signOut} bsSize="lg" >Sign Out</Button>
+                </Col>
+                <Col sm={2} smOffset={8} >
+                    <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+                </Col>
             </div>
             <div className={`${this.backgroundColor} row`}>
                 {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}

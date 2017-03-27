@@ -20,7 +20,7 @@ class Home extends React.Component {
       } else {
         console.log("Signed-out :(")
         this.isSignedIn = false
-        this.setState({isSignedIn: false})
+        this.setState({isSignedIn: false, hasFailedSignIn: false})
       }
     }
 
@@ -82,8 +82,11 @@ class Home extends React.Component {
   currentView() {
       return (
           <div className="nav-top-margin row grade-btn-padding">
-              <Col sm={2} smOffset={10} >
-                <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
+              <Col sm={2}>
+                  <Button onClick={this.firebase.signOut} bsSize="lg" >Sign Out</Button>
+              </Col>
+              <Col sm={2} smOffset={8} >
+                  <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
               </Col>
               { this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor="white" /> : this.gradeButtons() }
           </div>
