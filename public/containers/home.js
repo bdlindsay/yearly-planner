@@ -23,9 +23,10 @@ class Home extends React.Component {
         this.setState({isSignedIn: false, hasFailedSignIn: false})
       }
     }
+    this.listener = listener
 
-    this.firebase = new Firebase()
-    this.firebase.setAuthenticationListener(listener)
+    // this.firebase = new Firebase()
+    // this.firebase.setAuthenticationListener(listener)
 
     this.state = {
       gradeSelect: gradeSelect,
@@ -33,7 +34,8 @@ class Home extends React.Component {
       isSignedIn: this.isSignedIn,
       email: "",
       password: "",
-      hasFailedSignIn: false
+      hasFailedSignIn: false,
+      configFile: null
     }
 
     this.buttonText = this.buttonText.bind(this)
@@ -44,6 +46,26 @@ class Home extends React.Component {
     // TODO redirects?
     this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.dropConfig = this.dropConfig.bind(this)
+  }
+
+  dropConfig(event) {
+      event.preventDefault()
+
+      var dataTransfer = event.dataTransfer;
+      if (dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        for (let i=0; i < dataTransfer.items.length; i++) {
+          if (dataTransfer.items[i].kind == "file") {
+            var droppedFile = dataTransfer.items[i].getAsFile();
+            console.log("file[" + i + "].name = " + droppedFile.name);
+            this.setState({configFile: droppedFile}, () => {
+              console.log(this.state.configFile)
+            })
+            break
+          }
+        }
+      }
   }
 
   handleChange(stateVariable, {target}) {
@@ -53,6 +75,14 @@ class Home extends React.Component {
   }
 
   signInWithEmailAndPassword() {
+      if (!this.state.configFile) {
+          console.log("early exit")
+          this.setState({hasFailedSignIn: true})
+          return
+      }
+      this.firebase = new Firebase(this.state.configFile)
+      this.firebase.setAuthenticationListener(this.listener)
+
       this.firebase.authenticate(this.state.email, this.state.password).then( response => {
           console.log(`${email} was successfully signed-in`)
           this.setState({isSignedIn: true, password: "" })
@@ -104,7 +134,11 @@ class Home extends React.Component {
         <div className="row">
           <NavBar showMonths={false} />
         </div>
-            {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
+            {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange}
+                                                                 attemptSignIn={this.signInWithEmailAndPassword}
+                                                                 hasFailedSignIn={this.state.hasFailedSignIn}
+                                                                 dropConfig={this.dropConfig}
+                                                                 hasConfig={this.state.configFile}/>}
       </div>
     )
   }

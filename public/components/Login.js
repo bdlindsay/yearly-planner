@@ -1,11 +1,16 @@
 import React from 'react'
-import { Row, Col, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import { Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Well } from 'react-bootstrap'
 
 
 
-export default ({ handleChange, attemptSignIn, hasFailedSignIn }) => {
+export default ({ handleChange, attemptSignIn, hasFailedSignIn, hasConfig, dropConfig }) => {
     const loginErrorText = () => {
         return hasFailedSignIn ? <Col style={{color: "red"}} smOffset={2} sm={10} >Invalid email or password.</Col> : <Row></Row>
+    }
+    const viewFiles = () => {
+        return (
+          <div>{ (() => { if (hasConfig) { return "Have a file" } })() }</div>
+        )
     }
     return (
         <div className="center-vertically container">
@@ -27,6 +32,10 @@ export default ({ handleChange, attemptSignIn, hasFailedSignIn }) => {
                 <Col sm={10}>
                   <FormControl type="password" placeholder="Password" onChange={handleChange.bind(this, "password")}/>
                 </Col>
+              </FormGroup>
+
+              <FormGroup controlId="config">
+                  <Well onDragOver={(event) => event.preventDefault()} onDrop={dropConfig} >{viewFiles()}</Well>
               </FormGroup>
 
               <FormGroup>
