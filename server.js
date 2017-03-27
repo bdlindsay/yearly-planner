@@ -1,10 +1,12 @@
-var express = require('express');
-var app = express();
-var webpack = require("webpack");
-var webpackConfig = require("./webpack.config");
-var compiler = webpack(webpackConfig);
+const express = require('express');
+const app = express();
+const webpack = require("webpack");
 
-if (proccess.env.NODE_ENV == "development") {
+
+// if (process.env.NODE_ENV == "development") {
+//     console.log("dev")
+    const webpackConfig = require("./webpack.config");
+    const compiler = webpack(webpackConfig);
     const webpackHotMiddleware = require("webpack-hot-middleware");
     const webpackDevMiddleware = require("webpack-dev-middleware");
 
@@ -18,7 +20,11 @@ if (proccess.env.NODE_ENV == "development") {
     }));
 
     app.use(webpackHotMiddleware(compiler));
-}
+// } else {
+    // console.log("prod")
+    // const webpackConfig = require("./webpack-prod.config");
+    // const compiler = webpack(webpackConfig);
+ // }
 
 app.set('view engine', 'pug');
 app.set('views', 'public');
