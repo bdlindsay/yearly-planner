@@ -35,7 +35,7 @@ class Home extends React.Component {
       email: "",
       password: "",
       hasFailedSignIn: false,
-      configFile: null
+      config: null
     }
 
     this.buttonText = this.buttonText.bind(this)
@@ -59,9 +59,15 @@ class Home extends React.Component {
           if (dataTransfer.items[i].kind == "file") {
             var droppedFile = dataTransfer.items[i].getAsFile();
             console.log("file[" + i + "].name = " + droppedFile.name);
-            this.setState({configFile: droppedFile}, () => {
-              console.log(this.state.configFile)
-            })
+
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                console.log(event.target.result)
+                const newConfigFile = JSON.parse(event.target.result)
+                this.setState({configFile: newConfigFile})
+            }
+            reader.readAsText(droppedFile)
+
             break
           }
         }
@@ -76,7 +82,6 @@ class Home extends React.Component {
 
   signInWithEmailAndPassword() {
       if (!this.state.configFile) {
-          console.log("early exit")
           this.setState({hasFailedSignIn: true})
           return
       }
