@@ -121,19 +121,18 @@ class LessonView extends React.Component {
         return (
           <div>
             <div className="row">
-              <NavBar showMonths={!this.state.shouldShowCreateView} changeMonth={this.changeMonth} currentMonth={this.state.currentMonth} />
+              <NavBar showMonths={!this.state.shouldShowCreateView}
+                  changeMonth={this.changeMonth}
+                  currentMonth={this.state.currentMonth}
+                  addLessonToggle={this.toggleCreate}
+                  addLessonText={this.buttonText()}
+                  isSignedIn={this.state.isSignedIn}
+                  signOut={_.get(this, "firebase.signOut", (() => {})) }
+              />
             </div>
-            <div className="nav-top-margin row grade-btn-padding">
-                <Col sm={2}>
-                    <Button onClick={this.firebase.signOut} bsSize="lg" >Sign Out</Button>
-                </Col>
-                <Col sm={2} smOffset={8} >
-                    <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
-                </Col>
-            </div>
-            <div className={`${this.backgroundColor} row`}>
+            <Row className={`${this.backgroundColor} nav-top-margin grade-btn-padding`}>
                 {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
-            </div>
+            </Row>
           </div>
         )
     }

@@ -2,7 +2,7 @@ import React from "react"
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Grid, Row, Col } from "react-bootstrap"
 import { Link } from "react-router"
 
-const NavBar = ({showMonths, changeMonth, currentMonth}) => {
+const NavBar = ({showMonths, changeMonth, currentMonth, addLessonToggle, addLessonText, isSignedIn, signOut}) => {
   const optionalNavDropdown = () => {
     if (showMonths) {
       return (
@@ -34,6 +34,10 @@ const NavBar = ({showMonths, changeMonth, currentMonth}) => {
         <Navbar.Collapse>
         <Nav>
           {optionalNavDropdown()}
+        </Nav>
+        <Nav pullRight>
+            <NavItem eventKey={2} onClick={addLessonToggle}  disabled={!isSignedIn}>{addLessonText}</NavItem>
+            <NavItem eventKey={3} onClick={signOut} disabled={!isSignedIn}>Sign Out</NavItem>
         </Nav>
         </Navbar.Collapse>
     </Navbar>

@@ -134,12 +134,6 @@ class Home extends React.Component
     {
         return (
             <div className="nav-top-margin row grade-btn-padding">
-                <Col sm={2}>
-                    <Button onClick={this.firebase.signOut} bsSize="lg" >Sign Out</Button>
-                </Col>
-                <Col sm={2} smOffset={8} >
-                    <Button bsClass="add btn" bsSize="lg" onClick={this.toggleCreate} >{this.buttonText()}</Button>
-                </Col>
                 { this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor="white" /> : this.gradeButtons() }
             </div>
         )
@@ -156,7 +150,7 @@ class Home extends React.Component
         return (
             <div>
                 <div className="row">
-                    <NavBar showMonths={false} />
+                    <NavBar showMonths={false} addLessonToggle={this.toggleCreate} addLessonText={this.buttonText()} isSignedIn={this.state.isSignedIn} signOut={_.get(this, "firebase.signOut", (() => {})) } />
                 </div>
                 {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange}
                 attemptSignIn={this.signInWithEmailAndPassword}
