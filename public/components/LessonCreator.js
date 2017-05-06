@@ -2,11 +2,19 @@ import React from "react"
 import { Grid, Row, Col, FormControl, FormGroup, Button, Checkbox, ControlLabel, Well } from "react-bootstrap"
 import _ from "lodash"
 import CurriculumTabs from "./Curriculum"
+import curriculumReference from "../../curriculumReference"
 
 class LessonCreator extends React.Component {
     constructor({ upload, backgroundColor }) {
         super()
         // TODO grade level is getting stuff added to it automattically
+        let dynamicsTempo = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.dynamicsTempo, curriculum => { return { displayName: curriculum, selected: false } }) })
+        let form = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.form, curriculum => { return { displayName: curriculum, selected: false } }) })
+        let musicianship = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.musicianship, curriculum => { return { displayName: curriculum, selected: false } }) })
+        let pitch = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.pitch, curriculum => { return { displayName: curriculum, selected: false } }) })
+        let rhythm = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.rhythm, curriculum => { return { displayName: curriculum, selected: false } }) })
+        let timbre = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.timbre, curriculum => { return { displayName: curriculum, selected: false } }) })
+        console.log(dynamicsTempo)
         this.state = {
             files: [],
             lessonName: "",
@@ -15,81 +23,27 @@ class LessonCreator extends React.Component {
             lessonCurriculum: [
                 {
                     displayName: "Dynamics/Tempo",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: dynamicsTempo
                 },
                 {
                     displayName: "Form",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: form
                 },
                 {
                     displayName: "Musicianship",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: musicianship
                 },
                 {
                     displayName: "Pitch",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: pitch
                 },
                 {
                     displayName: "Rhythm",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: rhythm
                 },
                 {
                     displayName: "Timbre",
-                    values: [
-                        {
-                            displayName: "Curriculum 1",
-                            selected: false
-                        },
-                        {
-                            displayName: "Curriculum 2",
-                            selected: false
-                        }
-                    ]
+                    values: timbre
                 }
             ],
             gradeLevel: [],

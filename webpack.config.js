@@ -19,7 +19,7 @@ module.exports = {
           presets: ['es2015', 'react', 'stage-3']
         }
       }, {
-        loader: 'json',
+        loader: 'json-loader',
         test: /\.json$/,
         exclude: /node_modules/
       }, {
