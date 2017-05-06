@@ -23,27 +23,27 @@ class LessonCreator extends React.Component {
             lessonCurriculum: [
                 {
                     displayName: "Dynamics/Tempo",
-                    values: dynamicsTempo
+                    values: _.uniqBy(dynamicsTempo, item => item.displayName)
                 },
                 {
                     displayName: "Form",
-                    values: form
+                    values: _.uniq(form, item => item.displayName)
                 },
                 {
                     displayName: "Musicianship",
-                    values: musicianship
+                    values: _.uniq(musicianship, item => item.displayName)
                 },
                 {
                     displayName: "Pitch",
-                    values: pitch
+                    values: _.uniq(pitch, item => item.displayName)
                 },
                 {
                     displayName: "Rhythm",
-                    values: rhythm
+                    values: _.uniq(rhythm, item => item.displayName)
                 },
                 {
                     displayName: "Timbre",
-                    values: timbre
+                    values: _.uniq(timbre, item => item.displayName)
                 }
             ],
             gradeLevel: [],
