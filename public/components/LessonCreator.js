@@ -14,7 +14,7 @@ class LessonCreator extends React.Component {
         let pitch = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.pitch, curriculum => { return { displayName: curriculum, selected: false } }) })
         let rhythm = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.rhythm, curriculum => { return { displayName: curriculum, selected: false } }) })
         let timbre = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.timbre, curriculum => { return { displayName: curriculum, selected: false } }) })
-        console.log(dynamicsTempo)
+        //console.log(dynamicsTempo)
         this.state = {
             files: [],
             lessonName: "",
@@ -23,32 +23,37 @@ class LessonCreator extends React.Component {
             lessonCurriculum: [
                 {
                     displayName: "Dynamics/Tempo",
-                    values: _.uniqBy(dynamicsTempo, item => item.displayName)
+                    values: _.uniqBy(dynamicsTempo, item => item.displayName),
+                    key: 0
                 },
                 {
                     displayName: "Form",
-                    values: _.uniq(form, item => item.displayName)
+                    values: _.uniqBy(form, item => item.displayName),
+                    key: 1
                 },
                 {
                     displayName: "Musicianship",
-                    values: _.uniq(musicianship, item => item.displayName)
+                    values: _.uniqBy(musicianship, item => item.displayName),
+                    key: 2
                 },
                 {
                     displayName: "Pitch",
-                    values: _.uniq(pitch, item => item.displayName)
+                    values: _.uniqBy(pitch, item => item.displayName),
+                    key: 3
                 },
                 {
                     displayName: "Rhythm",
-                    values: _.uniq(rhythm, item => item.displayName)
+                    values: _.uniqBy(rhythm, item => item.displayName),
+                    key: 4
                 },
                 {
                     displayName: "Timbre",
-                    values: _.uniq(timbre, item => item.displayName)
+                    values: _.uniqBy(timbre, item => item.displayName),
+                    key: 5
                 }
             ],
             gradeLevel: [],
             isFormShowing: true,
-            color: "whitesmoke"
         }
 
         this.prepareForUpload = this.prepareForUpload.bind(this)
@@ -66,6 +71,7 @@ class LessonCreator extends React.Component {
         this.toggleSelected = this.toggleSelected.bind(this)
     }
 
+    // TODO handle form validation
     prepareForUpload() {
         const checkboxValues = (checkboxes) => {
             //console.log(checkboxes)
@@ -77,8 +83,17 @@ class LessonCreator extends React.Component {
             }
             return uploadValues
         }
+
+        function mapSelectedCurriculum(lessonCurriculum) {
+            let selectedCurriculum = _.map(lessonCurriculum, curriculum => {
+                return { category: curriculum.displayName, selectedValues: _.filter(curriculum.values, value => value.selected)}
+            })
+
+            console.log(selectedCurriculum)
+        }
+
         let uploadLessonType = checkboxValues(this.state.lessonType)
-        let uploadLessonCurriculum = this.state.lessonCurriculum // TODO what format should this be in? & need to get only good values
+        let uploadLessonCurriculum = mapSelectedCurriculum(this.state.lessonCurriculum)
         let uploadGradeLevel = checkboxValues(this.state.gradeLevel)
 
         const uploadObject = {
@@ -90,6 +105,7 @@ class LessonCreator extends React.Component {
           grade: uploadGradeLevel
         }
 
+        // TODO
         //this.props.upload(uploadObject)
     }
 
@@ -107,10 +123,13 @@ class LessonCreator extends React.Component {
         this.setState(change)
     }
 
-    toggleSelected() {
-        // TODO handle which curriculum are selected
-        const newColor = this.state.color === "whitesmoke" ? "deepskyblue" : "whitesmoke"
-        this.setState({color: newColor})
+    toggleSelected({target}) {
+        const selectedItem = JSON.parse(target.id)
+
+        let newLessonCurriculum = this.state.lessonCurriculum
+        newLessonCurriculum[selectedItem.categoryKey].values[selectedItem.curriculumKey].selected = !selectedItem.selected
+
+        this.setState({lessonCurriculum: newLessonCurriculum})
     }
 
     dropUpload(event) {
@@ -143,8 +162,8 @@ class LessonCreator extends React.Component {
     }
 
      gradeLevelCheckboxes(checkbox) {
-         console.log(checkbox)
-         console.log(this.state.gradeLevel)
+        //  console.log(checkbox)
+        //  console.log(this.state.gradeLevel)
          let checkboxes = this.state.gradeLevel
          checkboxes.push(checkbox)
          this.setState({gradeLevel: checkboxes})
