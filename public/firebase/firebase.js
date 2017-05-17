@@ -1,7 +1,6 @@
 require('firebase/storage')
 require('firebase/auth')
 require('firebase/database')
-//import config from '../../firebase.config'
 
 const firebase = require("firebase/app")
 
