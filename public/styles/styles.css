@@ -16,6 +16,11 @@
   margin-bottom: 15px;
 }
 
+.file-margin {
+    margin-top: 1px;
+    margin-bottom: 1px;
+    cursor: pointer;
+}
 .center-vertically {
     position: absolute;
     top: 20%;
@@ -30,11 +35,11 @@
 
   border: 0 solid;
   box-shadow: inset 0 9px 20px rgba(255, 255, 255, 0);
-  outline: 1px solid;
+  /*outline: 1px solid;
   outline-color: rgba(0, 0, 0, .5);
   outline-offset: 0px;
   text-shadow: none;
-  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);*/
 }
 
 .btn.add {
@@ -65,80 +70,46 @@
 }
 
 .yellow {
-  background-color: #ffee58;
+  background-color:	#FFDF46;
 }
-
 .green {
-  background-color: #66bb6a;
+  background-color: #63B76C;
 }
-
 .orange {
-  background-color: #ffa726;
+  background-color:	#FF8833;
 }
-
 .red {
-  background-color: #d60a0a;
+  background-color:	#CC3336;
 }
-
 .purple {
-  background-color: #ab47bc;
+  background-color:	#803790;
 }
-
 .blue {
-  background-color: #52a5f5;
+  background-color:	#1560BD;
 }
 
 .yellow:hover {
-  background-color: #fdd835;
+  background-color: #ffd91a;
 
-  border: 1px solid;
+  /*border: 1px solid;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
   outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  outline-offset: 15px;*/
 }
-
 .green:hover {
-  background-color: #43a047;
-
-  border: 1px solid;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-  outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  background-color: #489d51;
 }
 .orange:hover {
-  background-color: #fb8c00;
-
-  border: 1px solid;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-  outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  background-color: #ff6a00;
 }
-
 .red:hover {
-  background-color: #e53935;
-
-  border: 1px solid;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-  outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  background-color: #a3292b;
 }
-
 .purple:hover {
-  background-color: #8e24aa;
-
-  border: 1px solid;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-  outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  background-color: #622a6f;
 }
-
 .blue:hover {
-  background-color: #1e88e5;
-
-  border: 1px solid;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-  outline-color: rgba(255, 255, 255, 0);
-  outline-offset: 15px;
+  background-color: #1252a1;
 }
 
 .light-yellow {

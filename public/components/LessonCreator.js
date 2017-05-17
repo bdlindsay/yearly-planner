@@ -14,12 +14,15 @@ class LessonCreator extends React.Component {
         let pitch = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.pitch, curriculum => { return { displayName: curriculum, selected: false } }) })
         let rhythm = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.rhythm, curriculum => { return { displayName: curriculum, selected: false } }) })
         let timbre = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.timbre, curriculum => { return { displayName: curriculum, selected: false } }) })
-        //console.log(dynamicsTempo)
+        let movementTypes = _.flatMap(curriculumReference, gradeRef => { return _.flatMap(gradeRef.movementTypes, curriculum => { return { displayName: curriculum, selected: false } }) })
+
         this.state = {
+            isFormShowing: true,
             files: [],
             lessonName: "",
             lessonSource: "",
-            lessonType: [],
+            lessonType: [{displayName: "Vocal", checked: false }, {displayName: "Instrumental", checked: false }, {displayName: "Movement", checked: false }, {displayName: "Listening", checked: false }],
+            gradeLevel: [{displayName: "Kindergarten", checked: false }, {displayName: "1st Grade", checked: false }, {displayName: "2nd Grade", checked: false }, {displayName: "3rd Grade", checked: false }, {displayName: "4th Grade", checked: false }, {displayName: "5th Grade", checked: false }],
             lessonCurriculum: [
                 {
                     displayName: "Dynamics/Tempo",
@@ -50,20 +53,20 @@ class LessonCreator extends React.Component {
                     displayName: "Timbre",
                     values: _.uniqBy(timbre, item => item.displayName),
                     key: 5
+                },
+                {
+                    displayName: "Movement Types",
+                    values: _.uniqBy(movementTypes, item => item.displayName),
+                    key: 6
                 }
-            ],
-            gradeLevel: [],
-            isFormShowing: true,
+
+            ]
         }
 
         this.prepareForUpload = this.prepareForUpload.bind(this)
-        this.filePicked = this.filePicked.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.dropUpload = this.dropUpload.bind(this)
         this.viewFiles = this.viewFiles.bind(this)
-        this.lessonCurriculumCheckboxes = this.lessonCurriculumCheckboxes.bind(this)
-        this.lessonTypeCheckboxes = this.lessonTypeCheckboxes.bind(this)
-        this.gradeLevelCheckboxes = this.gradeLevelCheckboxes.bind(this)
         this.renderCheckboxes = this.renderCheckboxes.bind(this)
         this.currentView = this.currentView.bind(this)
         this.renderLessonForm = this.renderLessonForm.bind(this)
@@ -75,46 +78,35 @@ class LessonCreator extends React.Component {
     prepareForUpload() {
         const checkboxValues = (checkboxes) => {
             //console.log(checkboxes)
-            let uploadValues = []
-            for (let checkbox of checkboxes) {
-                if (checkbox.checked) {
-                    uploadValues.push(checkbox.labels[0].innerText)
-                }
-            }
-            return uploadValues
+            const values = _.map(checkboxes, checkbox => {
+                return checkbox.checked ? checkbox.displayName : undefined
+            })
+            return _.compact(values, undefined)
         }
 
         function mapSelectedCurriculum(lessonCurriculum) {
-            let selectedCurriculum = _.map(lessonCurriculum, curriculum => {
-                return { category: curriculum.displayName, selectedValues: _.filter(curriculum.values, value => value.selected)}
+            return _.map(lessonCurriculum, curriculum => {
+                return { category: curriculum.displayName, selectedValues: _.map(_.filter(curriculum.values, value => value.selected), "displayName")}
             })
-
-            console.log(selectedCurriculum)
         }
 
+        console.log("before upload logic")
         let uploadLessonType = checkboxValues(this.state.lessonType)
         let uploadLessonCurriculum = mapSelectedCurriculum(this.state.lessonCurriculum)
         let uploadGradeLevel = checkboxValues(this.state.gradeLevel)
 
         const uploadObject = {
-          lessonName: this.state.lessonName,
-          lessonSource: this.state.lessonSource,
-          files: this.state.files,
-          type: uploadLessonType,
-          curriculum: uploadLessonCurriculum,
-          grade: uploadGradeLevel
+            lessonName: this.state.lessonName,
+            lessonSource: this.state.lessonSource,
+            files: this.state.files,
+            type: uploadLessonType,
+            curriculum: uploadLessonCurriculum,
+            grade: uploadGradeLevel
         }
 
+        console.log(`Uploading ${JSON.stringify(uploadObject)}`)
         // TODO
         //this.props.upload(uploadObject)
-    }
-
-    filePicked(file) {
-      let newFiles = this.state.files
-      newFiles.push(file)
-      this.setState({files: newFiles}, () => {
-        console.log(this.state.files)
-      })
     }
 
     handleChange(stateVariable, {target}) {
@@ -138,55 +130,34 @@ class LessonCreator extends React.Component {
         var dataTransfer = event.dataTransfer;
 
         if (dataTransfer.items) {
-          // Use DataTransferItemList interface to access the file(s)
-          for (let i=0; i < dataTransfer.items.length; i++) {
-            if (dataTransfer.items[i].kind == "file") {
-              var droppedFile = dataTransfer.items[i].getAsFile();
-              console.log("file[" + i + "].name = " + droppedFile.name);
-              filePicked(droppedFile)
+            // Use DataTransferItemList interface to access the file(s)
+            for (let i=0; i < dataTransfer.items.length; i++) {
+                if (dataTransfer.items[i].kind == "file") {
+                    var droppedFile = dataTransfer.items[i].getAsFile();
+                    console.log("file[" + i + "].name = " + droppedFile.name);
+
+                    let newFiles = this.state.files
+                    newFiles.push(droppedFile)
+                    this.setState({files: newFiles})
+                }
             }
-          }
         }
     }
 
-    lessonTypeCheckboxes(checkbox) {
-        let checkboxes = this.state.lessonType
-        checkboxes.push(checkbox)
-        this.setState({lessonType: checkboxes})
-    }
-
-    lessonCurriculumCheckboxes(checkbox) {
-        let checkboxes = this.state.lessonCurriculum
-        checkboxes.push(checkbox)
-        this.setState({lessonCurriculum: checkboxes})
-    }
-
-     gradeLevelCheckboxes(checkbox) {
-        //  console.log(checkbox)
-        //  console.log(this.state.gradeLevel)
-         let checkboxes = this.state.gradeLevel
-         checkboxes.push(checkbox)
-         this.setState({gradeLevel: checkboxes})
-     }
-
     viewFiles() {
-        return (
-          <div>{this.state.files.length}</div>
-        )
-    }
+        const removeFileAtIndex = (index) => {
+            console.log(index)
+            let newFiles = this.state.files
+            newFiles.splice(index, 1)
 
-    renderCheckboxes(items, columnSize, keys) {
-        let counter = -1
-        return _.map(items, item => {
-            counter++
-            return (
-                <Col md={columnSize} key={`checkbox: ${keys[counter]}`} >
-                <Checkbox inline inputRef={this.gradeLevelCheckboxes}>
-                  {item}
-                </Checkbox>
-                </Col>
-            )
-        })
+            this.setState({files: newFiles})
+        }
+
+        return (
+            <Row className="form-margin">
+                {_.map(this.state.files, ({name}, index) => <Col className="file-margin" md={12} key={index} onClick={removeFileAtIndex.bind(this, index)} >{name} <b>Ⓧ</b></Col>)}
+            </Row>
+        )
     }
 
     toggleView() {
@@ -195,6 +166,37 @@ class LessonCreator extends React.Component {
 
     currentView() {
         return this.state.isFormShowing ? this.renderLessonForm() : <CurriculumTabs tabCategories={this.state.lessonCurriculum} toggleSelected={this.toggleSelected} color={this.state.color} />
+    }
+
+    renderCheckboxes(items, columnSize, stateKey) {
+        const checkboxClicked = ({target}) => {
+            const displayName = target.id
+
+            const index = _.findIndex(this.state[stateKey], {"displayName": displayName})
+
+            if (index === -1) { console.error(`didn't find ${displayName} in ${this.state[stateKey]} : ${stateKey} : ${this.state.gradeLevel}`); return }
+
+            let newState = this.state[stateKey]
+            newState[index] = {"displayName": displayName, checked: target.checked }
+
+            this.setState({stateKey: newState})
+        }
+
+        let counter = -1
+        return _.map(items, item => {
+            const index = _.findIndex(this.state[stateKey], {"displayName": item})
+
+            if (index === -1) { console.error(`didn't find ${displayName} in ${this.state[stateKey]} : ${stateKey} : ${this.state.gradeLevel}`); return }
+
+            counter++
+            return (
+                <Col md={columnSize} key={`checkbox: ${items[counter]}`} >
+                    <Checkbox id={item} inline onChange={checkboxClicked} checked={this.state[stateKey][index].checked} >
+                        {item}
+                    </Checkbox>
+                </Col>
+            )
+        })
     }
 
     renderLessonForm() {
@@ -220,44 +222,61 @@ class LessonCreator extends React.Component {
                 <ControlLabel>Resources: Drag & Drop files</ControlLabel>
                 <Well onDragOver={(event) => event.preventDefault()} onDrop={this.dropUpload} >{this.viewFiles()}</Well>
                 <Well className={this.props.backgroundColor} >
-                <ControlLabel className="form-margin">Lesson Type</ControlLabel>
-                <Row>
-                    {this.renderCheckboxes(["Vocal", "Instrumental", "Movement", "Listening"], 3, ["Vocal", "Instrumental", "Movement", "Listening"])}
-                </Row>
+                    <ControlLabel className="form-margin">Lesson Type</ControlLabel>
+                    <Row>
+                        {this.renderCheckboxes(_.map(this.state.lessonType, "displayName"), 3, "lessonType")}
+                    </Row>
                 </Well>
                 <div className="form-margin"></div>
                 <Well className={this.props.backgroundColor} >
-                <ControlLabel className="form-margin">Grade Level</ControlLabel>
-                <Row>
-                    {this.renderCheckboxes(["Kindergarten", <div>1<sup>st</sup> Grade</div>, <div>2<sup>nd</sup> Grade</div>], 4, ["K", "1st", "2nd"])}
-                </Row>
-                <div className="form-margin"></div>
-                <Row>
-                  {this.renderCheckboxes([<div>3<sup>rd</sup></div>, <div>4<sup>th</sup> Grade</div>, <div>5<sup>th</sup> Grade</div>], 4, ["3rd", "4th", "5th"])}
-                </Row>
+                    <ControlLabel className="form-margin">Grade Level</ControlLabel>
+                    <Row>
+                        {this.renderCheckboxes(_.slice(_.map(this.state.gradeLevel, "displayName"), 0, 3), 4, "gradeLevel")}
+                    </Row>
+                    <div className="form-margin"></div>
+                    <Row>
+                        {this.renderCheckboxes(_.slice(_.map(this.state.gradeLevel, "displayName"), 3, this.state.gradeLevel.length), 4, "gradeLevel")}
+                    </Row>
                 </Well>
             </FormGroup>
         )
     }
 
+    renderUploadButton() {
+        if (this.state.isFormShowing) {
+            return (
+                <Row className="separatingMargin">
+                    <Col md={12}>
+                        <Button bsStyle="primary" bsSize="large" onClick={this.prepareForUpload} block>Upload</Button>
+                    </Col>
+                </Row>
+            )
+        } else { return }
+    }
+
+    renderCurriculumButton(shouldShow) {
+        if (shouldShow) {
+            return (
+                <Row className="form-margin">
+                    <Col md={12}>
+                        <Button bsStyle="info" bsSize="large" block onClick={this.toggleView} >{this.state.isFormShowing ? "Curriculum" : "Back" }</Button>
+                    </Col>
+                </Row>
+            )
+        } else { return }
+    }
+
     render(){
         return  (
-          <Grid>
-              {this.currentView()}
-              <div className="separatingMargin"></div>
-              <Row className="form-margin">
-                  <Col md={12}>
-                      <Button bsStyle="info" bsSize="large" block onClick={this.toggleView} >Curriculum</Button>
-                  </Col>
-              </Row>
-              <hr/>
-              <Row className="separatingMargin">
-                <Col md={12}>
-                  <Button bsStyle="primary" bsSize="large" onClick={this.prepareForUpload} block>Upload</Button>
-                </Col>
-              </Row>
-              <hr/>
-          </Grid>
+            <Grid>
+                {this.renderCurriculumButton(!this.state.isFormShowing)}
+                {this.currentView()}
+                <div className="separatingMargin"></div>
+                {this.renderCurriculumButton(true)}
+                <hr/>
+                {this.renderUploadButton()}
+                <hr/>
+            </Grid>
         )
     }
 }

@@ -4,8 +4,9 @@
         "form": [],
         "musicianship": ["Audience Etiquette", "Musicianship", "Perform in groupsFollow conductor’s cues", "Proper instrument care/technique"],
         "pitch": ["Singing voice (sol-mi)", "Vocal Exploration"],
-        "rhythm": ["Circle game/dance", "Echo rhythm patterns", "Long vs. Short", "Iconic notation (Note images)", "Individual movement", "Long Way Set", "Move to sound and silence", "Partner movement", "Steady Beat"],
-        "timbre": ["Describe music (plain/fancy, bright/dark)", "Nature/Man-made/animal sounds", "Same/Different/Echo"]
+        "rhythm": ["Echo rhythm patterns", "Long vs. Short", "Iconic notation (Note images)", "Individual movement", "Move to sound and silence", "Steady Beat"],
+        "timbre": ["Describe music (plain/fancy, bright/dark)", "Nature/Man-made/animal sounds", "Same/Different/Echo"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     },
     "firstGrade": {
         "dynamicsTempo": ["Fast/Slow tempo", "Fast/Slow", "High/Low", "Quiet/Loud"],
@@ -13,7 +14,8 @@
         "musicianship": ["Audience Etiquette", "Describe how a piece of music makes you feel", "Compose ostinatos as accompaniment", "Follow conductor’s cues", "Perform in groups", "Proper instrument care/technique", "Respond to performances using music vocab"],
         "pitch": ["Singing voice (mi, sol, la)", "Up/Down"],
         "rhythm": ["Beat/No Beat", "Echo rhythmic patterns", "Iconic pitch notation (high/low)", "Iconic/Standard notation (q,n,Q)", "Improvise rhythmic patterns", "Long/Short", "Smooth/Seperated", "Steady Beat"],
-        "timbre": ["Accompanied vs. unaccompanied", "Same/Different", "Male, Female, and Children’s voice types"]
+        "timbre": ["Accompanied vs. unaccompanied", "Same/Different", "Male, Female, and Children’s voice types"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     },
     "secondGrade": {
         "dynamicsTempo": ["Fast/Slow tempo", "Loud/Quiet dynamics (p,f)"],
@@ -21,7 +23,8 @@
         "musicianship": ["Accompanist vs. soloist", "Audience Etiquette", "Compose rhythms using iconic notation", "Follow conductor’s cues", "Ostinato performance", "Perform in groups with steady beat & matching dynamics", "Proper instrument care/technique"],
         "pitch": ["High/Low", "Iconic notation to staff", "Melody lines (up, down, or same)", "Singing Voice (la, sol, mi, re, do)"],
         "rhythm": ["Echo rhythm patterns", "Iconic/Standard notation (w,W,q,Q,h,H,n)", "Smooth/Seperated"],
-        "timbre": ["Same/Different"]
+        "timbre": ["Same/Different"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     },
     "thirdGrade": {
         "dynamicsTempo": ["Dynamics (p,f,decresecendo/diminuendo)", "Tempo (fast, slow, ritardando)", "Perform in groups matching tempo & dynamics"],
@@ -29,7 +32,8 @@
         "musicianship": ["Assess performances using vocab", "Compose rhythms and melodies", "Connect music to other arts", "Connect music to other subjects", "Dance and theater vocab", "Ensemble groups (solo, duet, etc.)", "Expressive Markings (accent, fermata)", "Follow conductor’s cues", "Improvise rhythms and melodic ostinati", "Proper instrument care/technique", "Star-Spangled Banner"],
         "pitch": ["Singing Voice (la, sol, mi, re, do)", "Staff notation (la, sol, mi, re, do)"],
         "rhythm": ["Echo rhythmic and melodic patterns", "Iconic/Standard notation (w,W,q,Q,h,H,n) "],
-        "timbre": ["Methods of sound production", "Visually and aurally identify instrument families"]
+        "timbre": ["Methods of sound production", "Visually and aurally identify instrument families"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     },
     "fourthGrade": {
         "dynamicsTempo": ["Dynamics (p,mp,mf,f,decrescendo/diminuendo,crescendo)", "Tempo (fast, slow, ritardando)"],
@@ -37,7 +41,8 @@
         "musicianship": ["Assess performance based on personal response", "Assess performance using vocab", "Choral singing etiquette", "Compose rhythmic and melodic ostinati", "Compose soundscapes", "Echo rhythmic and melodic patterns", "Connect music to arts", "Connect music to other subjects", "Dance and theater vocab", "Discuss band, choir, orchestra, theatre opportunities", "Expressive Markings (accent fermata)", "Follow conductor’s cues", "Improvise rhythmic and melodic ostinati", "Missouri/American Heritage", "Perform independently in a group", "Proper instrument care/technique", "Read and perform 3 pitches on recorder"],
         "pitch": ["Singing Voice (match pitch in an octave)"],
         "rhythm": ["Meters (4/4, 2/4, 3/4)", "Standard Notation (q,Q,w,W,h,H,e,E,n,d,y v)", "Standard notation (treble clef staff)", "Syncopation"],
-        "timbre": ["Identify instruments of other cultures", "Identify vocal vs. orchestral groups"]
+        "timbre": ["Identify instruments of other cultures", "Identify vocal vs. orchestral groups"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     },
     "fifthGrade": {
         "dynamicsTempo": ["Dynamics (pp,p,mp,mf,f,ff,cres.,decres.)", "Tempo (allegro, moderato, andante, largo, a tempo, rit, accel)"],
@@ -45,6 +50,7 @@
         "musicianship": ["Assess peroformance based on personal response", "Assess performance using vocab", "Choral singing etiquette", "Compose rhythmically and melodically", "Connect music to arts", "Connect music to other subjects", "Dance and theatre vocab", "Echo rhythmic and melodic patterns", "Expressive markings (accent, fermata, staccato, legato, slurs)", "Expressive performance", "Follow conductor’s cues", "Improvise rhythmic and melodic ostinati", "Musical Careers", "Perform in groups using characteristic timbre, tempo, and dynamics", "Proper instrument care/technique", "Read and perform 5 pitches on a melodic instrument"],
         "pitch": ["Accidentals", "Singing Voice (breath control, diction, expression)", "Staff notation (treble clef w/1 ledger line)"],
         "rhythm": ["Meter (4/4, 2/4, 3/4, 6/8)", "Standard notation ((w,W,h,H,q,Q,e,E,n,d,y,je)"],
-        "timbre": ["Identify musical groups (SATB, Jazz Band, Concert Band, Orchestra, etc.)"]
+        "timbre": ["Identify musical groups (SATB, Jazz Band, Concert Band, Orchestra, etc.)"],
+        "movementTypes": ["Scattered Movement", "Circle Game/Dance", "Partner Movement", "Long Way Set"]
     }
 }

@@ -11,7 +11,9 @@ class Firebase {
             firebase.app()
         } catch (error) {
             if (config === undefined) {
-                throw "No config file"
+                if (process.env.NODE_ENV === "development") {
+                    config = require("../../firebase.config").config
+                } else { throw "No config file" }
             }
             console.log("Initializing Firebase")
             firebase.initializeApp(config);
@@ -24,6 +26,7 @@ class Firebase {
         this.authenticate = this.authenticate.bind(this)
         this.signInUser = this.signInUser.bind(this)
     }
+
     signOut() {
         firebase.auth().signOut().then( () => {
             console.log("signed out")
@@ -31,6 +34,7 @@ class Firebase {
             console.log(`Error: ${error}`)
         })
     }
+
     setAuthenticationListener(listener) {
         firebase.auth().onAuthStateChanged(listener)
     }
