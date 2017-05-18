@@ -1,3 +1,4 @@
+import agent from './agent'
 require('firebase/storage')
 require('firebase/auth')
 require('firebase/database')
@@ -20,7 +21,6 @@ class Firebase {
 
         this.database = firebase.database()
         this.storageReference = firebase.storage().ref()
-        this.downloadResource = this.downloadResource.bind(this)
         this.downloadLessons = this.downloadLessons.bind(this)
         this.authenticate = this.authenticate.bind(this)
         this.signInUser = this.signInUser.bind(this)
@@ -58,21 +58,21 @@ class Firebase {
 
             newLessonReference.put(blob).then( snapshot => {
                 console.log("Uploaded ", snapshot)
+
+                newLessonReference.getDownloadURL().then( url => {
+                    const dbUploadObject = {...lessonObject, files: url}
+                    // TODO upload this object to real-time database with newLessonPath
+                    let newPostKey = this.database.ref().child("lessons").push().key
+                    let newLesson = {}
+                    newLesson[newPostKey] = dbUploadObject
+
+                    return this.database.ref("lessons/").update(newLesson)
+                })
             }).catch( error => {
                 console.error(error)
             })
-
-            newLessonReference.getDownloadURL().then( url => {
-                const dbUploadObject = {...lessonObject, files: url}
-                // TODO upload this object to real-time database with newLessonPath
-                let newPostKey = this.database.ref().child("lessons").push().key
-                let newLesson = {}
-                newLesson[newPostKey] = dbUploadObject
-
-                return this.database.ref("lessons/").update(newLesson)
-            })
         } else {
-            const dbUploadObject = {...lessonObject, files: null}
+            const dbUploadObject = {...lessonObject, files: undefined}
             // TODO upload this object to real-time database with newLessonPath
             let newPostKey = this.database.ref().child("lessons").push().key
             let newLesson = {}
@@ -80,11 +80,6 @@ class Firebase {
 
             return this.database.ref("lessons/").update(newLesson)
         }
-    }
-
-    downloadResource(url) {
-        // TODO download resource for a specific lesson
-        // TODO do an agent.get call to url - parse json into array of json -> files
     }
 
     downloadLessons() {

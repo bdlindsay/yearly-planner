@@ -106,7 +106,7 @@ class LessonCreator extends React.Component {
 
         console.log(`Uploading ${JSON.stringify(uploadObject)}`)
         // TODO
-        //this.props.upload(uploadObject)
+        this.props.upload(uploadObject)
     }
 
     handleChange(stateVariable, {target}) {
