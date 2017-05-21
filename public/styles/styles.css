@@ -7,10 +7,6 @@
   margin-top: 4%;
 }
 
-.grade-btn-padding {
-  padding: 20px;
-}
-
 .form-margin {
   margin-top: 15px;
   margin-bottom: 15px;
@@ -21,6 +17,15 @@
     margin-bottom: 1px;
     cursor: pointer;
 }
+
+.drag-drop-padding {
+    padding: 40px;
+}
+
+.grade-btn-padding {
+  padding: 20px;
+}
+
 .center-vertically {
     position: absolute;
     top: 20%;

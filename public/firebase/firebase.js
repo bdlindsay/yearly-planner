@@ -10,10 +10,9 @@ class Firebase {
         try {
             firebase.app()
         } catch (error) {
+            console.log(process.env)
             if (config === undefined) {
-                if (process.env.NODE_ENV === "development") {
-                    config = require("../../firebase.config").config
-                } else { throw "No config file" }
+                throw "No config file"
             }
             console.log("Initializing Firebase")
             firebase.initializeApp(config);
@@ -83,8 +82,6 @@ class Firebase {
     }
 
     downloadLessons() {
-        // TODO create path to lessons from each grade
-        // pass back all the whole object for use by UI
         return this.database.ref("lessons").once("value")
     }
 }

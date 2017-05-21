@@ -79,7 +79,7 @@ class LessonCreator extends React.Component {
         const checkboxValues = (checkboxes) => {
             //console.log(checkboxes)
             const values = _.map(checkboxes, checkbox => {
-                return checkbox.checked ? checkbox.displayName : undefined
+                return checkbox.checked ? checkbox.displayName.replace(/\s/, "") : undefined
             })
             return _.compact(values, undefined)
         }

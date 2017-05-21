@@ -36,7 +36,7 @@ class Home extends React.Component
 
         this.state = {
             shouldShowCreateView: false,
-            isSignedIn: process.env.NODE_ENV == "development" ? true : this.isSignedIn, // TODO remove later
+            isSignedIn: this.isSignedIn,
             email: "",
             password: "",
             hasFailedSignIn: false,

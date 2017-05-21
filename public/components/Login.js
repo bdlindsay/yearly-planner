@@ -9,7 +9,7 @@ export default ({ handleChange, attemptSignIn, hasFailedSignIn, hasConfig, dropC
     }
     const viewFiles = () => {
         return (
-          <div>{ (() => { if (hasConfig) { return "Have a file" } })() }</div>
+          <div>{ (() => { if (hasConfig) { return "File captured" } })() }</div>
         )
     }
     return (
@@ -35,7 +35,10 @@ export default ({ handleChange, attemptSignIn, hasFailedSignIn, hasConfig, dropC
               </FormGroup>
 
               <FormGroup controlId="config">
-                  <Well onDragOver={(event) => event.preventDefault()} onDrop={dropConfig} >{viewFiles()}</Well>
+                  <Col sm={2} componentClass={ControlLabel} >Configuration Drop</Col>
+                  <Col sm={10}>
+                      <Well className="drag-drop-padding" onDragOver={(event) => event.preventDefault()} onDrop={dropConfig} >{viewFiles()}</Well>
+                  </Col>
               </FormGroup>
 
               <FormGroup>

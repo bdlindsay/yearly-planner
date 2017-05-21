@@ -6,6 +6,7 @@ import Firebase from "../firebase/firebase"
 import LessonTable from "../components/LessonTable"
 import LessonCreator from "../components/LessonCreator"
 import Login from "../components/Login"
+import _ from "lodash"
 
 class LessonView extends React.Component {
     constructor(props) {
@@ -67,6 +68,7 @@ class LessonView extends React.Component {
         // TODO redirects?
         this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.filteredLessons = this.filteredLessons.bind(this)
     }
 
     componentWillMount() {
@@ -105,8 +107,12 @@ class LessonView extends React.Component {
         this.firebase.upload(uploadObject) // TODO callback for when it has successfully uploaded?
     }
 
+    filteredLessons(lessons) {
+        return _.filter(lessons, lesson => lesson.grade.includes(this.state.grade))
+    }
+
     currentView() {
-        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.state.lessons} />
+        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.filteredLessons(this.state.lessons)} />
     }
 
     toggleCreate() {
