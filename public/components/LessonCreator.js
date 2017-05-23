@@ -21,8 +21,22 @@ class LessonCreator extends React.Component {
             files: [],
             lessonName: "",
             lessonSource: "",
-            lessonType: [{displayName: "Vocal", checked: false }, {displayName: "Instrumental", checked: false }, {displayName: "Movement", checked: false }, {displayName: "Listening", checked: false }],
-            gradeLevel: [{displayName: "Kindergarten", checked: false }, {displayName: "1st Grade", checked: false }, {displayName: "2nd Grade", checked: false }, {displayName: "3rd Grade", checked: false }, {displayName: "4th Grade", checked: false }, {displayName: "5th Grade", checked: false }],
+            lessonType: [{displayName: "Vocal", selected: false }, {displayName: "Instrumental", selected: false }, {displayName: "Movement", selected: false }, {displayName: "Listening", selected: false }],
+            gradeLevel: [{displayName: "Kindergarten", selected: false }, {displayName: "1st Grade", selected: false }, {displayName: "2nd Grade", selected: false }, {displayName: "3rd Grade", selected: false }, {displayName: "4th Grade", selected: false }, {displayName: "5th Grade", selected: false }],
+            lessonMonths: [
+                {key: 0, displayName: "January", selected: false},
+                {key: 1, displayName: "February", selected: false},
+                {key: 2, displayName: "March", selected: false},
+                {key: 3, displayName: "April", selected: false},
+                {key: 4, displayName: "May", selected: false},
+                {key: 5, displayName: "June", selected: false},
+                {key: 6, displayName: "July", selected: false},
+                {key: 7, displayName: "August", selected: false},
+                {key: 8, displayName: "September", selected: false},
+                {key: 9, displayName: "October", selected: false},
+                {key: 10, displayName: "November", selected: false},
+                {key: 11, displayName: "December", selected: false},
+            ],
             lessonCurriculum: [
                 {
                     displayName: "Dynamics/Tempo",
@@ -67,7 +81,6 @@ class LessonCreator extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.dropUpload = this.dropUpload.bind(this)
         this.viewFiles = this.viewFiles.bind(this)
-        this.renderCheckboxes = this.renderCheckboxes.bind(this)
         this.currentView = this.currentView.bind(this)
         this.renderLessonForm = this.renderLessonForm.bind(this)
         this.toggleView = this.toggleView.bind(this)
@@ -76,10 +89,10 @@ class LessonCreator extends React.Component {
 
     // TODO handle form validation
     prepareForUpload() {
-        const checkboxValues = (checkboxes) => {
+        const boxSelectValues = (boxSelects) => {
             //console.log(checkboxes)
-            const values = _.map(checkboxes, checkbox => {
-                return checkbox.checked ? checkbox.displayName.replace(/\s/, "") : undefined
+            const values = _.map(boxSelects, boxSelect => {
+                return boxSelect.selected ? boxSelect.displayName.replace(/\s/, "") : undefined
             })
             return _.compact(values, undefined)
         }
@@ -90,10 +103,10 @@ class LessonCreator extends React.Component {
             })
         }
 
-        console.log("before upload logic")
-        let uploadLessonType = checkboxValues(this.state.lessonType)
+        let uploadLessonType = boxSelectValues(this.state.lessonType)
         let uploadLessonCurriculum = mapSelectedCurriculum(this.state.lessonCurriculum)
-        let uploadGradeLevel = checkboxValues(this.state.gradeLevel)
+        let uploadGradeLevel = boxSelectValues(this.state.gradeLevel)
+        let uploadLessonMonths = boxSelectValues(this.state.lessonMonths)
 
         const uploadObject = {
             lessonName: this.state.lessonName,
@@ -101,11 +114,10 @@ class LessonCreator extends React.Component {
             files: this.state.files,
             type: uploadLessonType,
             curriculum: uploadLessonCurriculum,
-            grade: uploadGradeLevel
+            grade: uploadGradeLevel,
+            months: uploadLessonMonths
         }
 
-        console.log(`Uploading ${JSON.stringify(uploadObject)}`)
-        // TODO
         this.props.upload(uploadObject)
     }
 
@@ -168,8 +180,8 @@ class LessonCreator extends React.Component {
         return this.state.isFormShowing ? this.renderLessonForm() : <CurriculumTabs tabCategories={this.state.lessonCurriculum} toggleSelected={this.toggleSelected} color={this.state.color} />
     }
 
-    renderCheckboxes(items, columnSize, stateKey) {
-        const checkboxClicked = ({target}) => {
+    renderBoxSelects(items, stateKey, columnSize) {
+        const boxSelected = ({target}) => {
             const displayName = target.id
 
             const index = _.findIndex(this.state[stateKey], {"displayName": displayName})
@@ -177,26 +189,25 @@ class LessonCreator extends React.Component {
             if (index === -1) { console.error(`didn't find ${displayName} in ${this.state[stateKey]} : ${stateKey} : ${this.state.gradeLevel}`); return }
 
             let newState = this.state[stateKey]
-            newState[index] = {"displayName": displayName, checked: target.checked }
+            let boxSelect = newState[index]
+            newState[index] = {displayName, key: boxSelect.key, selected: !boxSelect.selected }
 
-            this.setState({stateKey: newState})
+            let stateObject = {}
+            stateObject[stateKey] = newState
+            this.setState(stateObject)
         }
 
-        let counter = -1
-        return _.map(items, item => {
-            const index = _.findIndex(this.state[stateKey], {"displayName": item})
-
-            if (index === -1) { console.error(`didn't find ${displayName} in ${this.state[stateKey]} : ${stateKey} : ${this.state.gradeLevel}`); return }
-
-            counter++
-            return (
-                <Col md={columnSize} key={`checkbox: ${items[counter]}`} >
-                    <Checkbox id={item} inline onChange={checkboxClicked} checked={this.state[stateKey][index].checked} >
-                        {item}
-                    </Checkbox>
-                </Col>
-            )
+        const contents =  _.map(items, item => {
+            return <Col md={columnSize} key={item.displayName} ><Col md={12} id={item.displayName} className={`box-select ${item.selected ? "box-select-selected" : ""}`} onClick={boxSelected} >{item.displayName}</Col></Col>
         })
+
+        return (
+            <center>
+            <Row>
+                {contents}
+            </Row>
+            </center>
+        )
     }
 
     renderLessonForm() {
@@ -210,33 +221,32 @@ class LessonCreator extends React.Component {
                 <Row className="form-margin">
                     <Col md={12}>
                         <ControlLabel>Name</ControlLabel>
-                        <FormControl type="text" placeholder="Name" onChange={this.handleChange.bind(this, "lessonName")}/>
+                        <FormControl type="text" placeholder="Name" onChange={this.handleChange.bind(this, "lessonName")} value={this.state.lessonName} />
                     </Col>
                 </Row>
                 <Row className="form-margin">
                     <Col md={12}>
                         <ControlLabel>Source</ControlLabel>
-                        <FormControl type="text" placeholder="Source" onChange={this.handleChange.bind(this, "lessonSource")}/>
+                        <FormControl type="text" placeholder="Source" onChange={this.handleChange.bind(this, "lessonSource")} value={this.state.lessonSource} />
                     </Col>
                 </Row>
                 <ControlLabel>Resources: Drag & Drop files</ControlLabel>
                 <Well onDragOver={(event) => event.preventDefault()} onDrop={this.dropUpload} >{this.viewFiles()}</Well>
-                <Well className={this.props.backgroundColor} >
+                <Well>
                     <ControlLabel className="form-margin">Lesson Type</ControlLabel>
+                    {this.renderBoxSelects(this.state.lessonType, "lessonType", 3)}
+                </Well>
+                <div className="form-margin"></div>
+                <Well>
+                    <ControlLabel className="form-margin">Grade Level</ControlLabel>
                     <Row>
-                        {this.renderCheckboxes(_.map(this.state.lessonType, "displayName"), 3, "lessonType")}
+                        {this.renderBoxSelects(this.state.gradeLevel, "gradeLevel", 4)}
                     </Row>
                 </Well>
                 <div className="form-margin"></div>
-                <Well className={this.props.backgroundColor} >
-                    <ControlLabel className="form-margin">Grade Level</ControlLabel>
-                    <Row>
-                        {this.renderCheckboxes(_.slice(_.map(this.state.gradeLevel, "displayName"), 0, 3), 4, "gradeLevel")}
-                    </Row>
-                    <div className="form-margin"></div>
-                    <Row>
-                        {this.renderCheckboxes(_.slice(_.map(this.state.gradeLevel, "displayName"), 3, this.state.gradeLevel.length), 4, "gradeLevel")}
-                    </Row>
+                <Well>
+                    <ControlLabel className="form-margin">Months Taught In</ControlLabel>
+                    {this.renderBoxSelects(this.state.lessonMonths, "lessonMonths", 3)}
                 </Well>
             </FormGroup>
         )

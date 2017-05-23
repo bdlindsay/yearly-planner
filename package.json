@@ -34,7 +34,7 @@
   "devDependencies": {},
   "scripts": {
     "firebase": "firebase serve",
-    "dev": "cross-env NODE_ENV=development Wnode server.js",
+    "dev": "cross-env NODE_ENV=development node server.js",
     "webpack": "webpack -d",
     "start": "cross-env NODE_ENV=production node server.js"
   },

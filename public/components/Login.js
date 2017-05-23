@@ -7,11 +7,13 @@ export default ({ handleChange, attemptSignIn, hasFailedSignIn, hasConfig, dropC
     const loginErrorText = () => {
         return hasFailedSignIn ? <Col style={{color: "red"}} smOffset={2} sm={10} >Invalid email or password.</Col> : <Row></Row>
     }
+
     const viewFiles = () => {
         return (
           <div>{ (() => { if (hasConfig) { return "File captured" } })() }</div>
         )
     }
+
     return (
         <div className="center-vertically container">
             {loginErrorText()}

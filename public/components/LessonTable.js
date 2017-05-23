@@ -1,8 +1,8 @@
 import React from "react"
-import { Table, Popover, OverlayTrigger } from "react-bootstrap"
+import { Table, Popover, OverlayTrigger, Col, Row } from "react-bootstrap"
 import _ from "lodash"
 
-const LessonTable = ({lessons}) => {
+const LessonTable = ({lessons, grade}) => {
   const ciriculumPopover = () => {
     return <Popover id="popover-trigger-click-root-close" title="Ciriculum"><ul><li>Ciriculum A</li><li>Ciriculum B</li><li>Ciriculum C</li></ul></Popover>
   }
@@ -32,17 +32,24 @@ const LessonTable = ({lessons}) => {
   }
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Lesson Name</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-          {lessonRows()}
-      </tbody>
-    </Table>
+    <Row>
+        <Col md={12}>
+            <h3>{_.replace(grade, "Grade", " Grade")}</h3>
+        </Col>
+        <Col md={12}>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Lesson Name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {lessonRows()}
+              </tbody>
+            </Table>
+        </Col>
+    </Row>
   )
 }
 

@@ -18,11 +18,10 @@ export default ({ tabCategories, toggleSelected, color }) => {
         let key = -1
         return _.map(curriculumPoints, curriculum => {
             key++
-            // TODO add category and curriculumPoint to selected method and only change 1 at a time
             return (
                 <Col md={6} key={`Col${key}`}>
                     <Well id={`{"categoryKey": "${category.key}", "curriculumKey": "${key}", "selected": ${curriculum.selected}}`}
-                          style={{backgroundColor: curriculum.selected ? "lightsteelblue" : "whitesmoke" }}
+                          className={`curriculum-select ${curriculum.selected ? "curriculum-select-selected" : ""}`}
                           onClick={toggleSelected} >
                           {curriculum.displayName}
                     </Well>

@@ -10,7 +10,6 @@ class Firebase {
         try {
             firebase.app()
         } catch (error) {
-            console.log(process.env)
             if (config === undefined) {
                 throw "No config file"
             }
@@ -55,18 +54,16 @@ class Firebase {
 
             const newLessonReference = this.storageReference.child(newLessonPath)
 
-            newLessonReference.put(blob).then( snapshot => {
-                console.log("Uploaded ", snapshot)
+            return newLessonReference.put(blob).then( snapshot => {
+                console.log("Uploaded File", snapshot)
 
-                newLessonReference.getDownloadURL().then( url => {
-                    const dbUploadObject = {...lessonObject, files: url}
-                    // TODO upload this object to real-time database with newLessonPath
-                    let newPostKey = this.database.ref().child("lessons").push().key
-                    let newLesson = {}
-                    newLesson[newPostKey] = dbUploadObject
+                const dbUploadObject = {...lessonObject, files: snapshot.downloadURL}
 
-                    return this.database.ref("lessons/").update(newLesson)
-                })
+                let newPostKey = this.database.ref().child("lessons").push().key
+                let newLesson = {}
+                newLesson[newPostKey] = dbUploadObject
+
+                return this.database.ref("lessons/").update(newLesson)
             }).catch( error => {
                 console.error(error)
             })

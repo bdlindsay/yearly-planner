@@ -31,6 +31,57 @@
     top: 20%;
 }
 
+.box-select {
+    border-radius: 10px;
+    border-width: 1.5px;
+    border-color: #AAA;
+    border-style: solid;
+    margin: 5px;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.box-select:hover {
+    background-color: #EFF;
+    transition: .15s;
+}
+
+.box-select-selected {
+    background-color: #b5d7e3;
+    transition: .15s;
+}
+
+.box-select-selected:hover {
+    background-color: #90c4d5;
+    transition: .15s;
+}
+
+.curriculum-select {
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .15s;
+    background-color: whitesmoke;
+}
+
+.curriculum-select:hover {
+    background-color: #EFF;
+    transition: .15s;
+}
+
+.curriculum-select-selected {
+    background-color: #b5d7e3;
+    transition: .15s;
+}
+
+.curriculum-select-selected:hover {
+    background-color: #90c4d5;
+    transition: .15s;
+}
+
 .grade-btn {
   font-family: "Tahoma";
   font-size: 4vw;

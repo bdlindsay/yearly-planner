@@ -98,13 +98,16 @@ class LessonView extends React.Component {
     }
 
     uploadToFirebase(uploadObject) {
-        for (const file of uploadObject.files) {
-            console.log("Uploading" + JSON.stringify(file))
-            //this.firebase.upload(file)
-        }
-
         console.log("Uploading" + JSON.stringify(uploadObject))
-        this.firebase.upload(uploadObject) // TODO callback for when it has successfully uploaded?
+        // TODO callback for when it has successfully uploaded?
+        this.firebase.upload(uploadObject, callback).then(response => {
+            console.log(response)
+            console.log("Successfully uploaded lesson.")
+            this.setState({shouldShowCreateView: false})
+        }).catch( error => {
+            console.log(error)
+        })
+        this.setState({shouldShowCreateView: false}) // TODO remove when callback from db works?
     }
 
     filteredLessons(lessons) {
@@ -112,7 +115,7 @@ class LessonView extends React.Component {
     }
 
     currentView() {
-        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.filteredLessons(this.state.lessons)} />
+        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.filteredLessons(this.state.lessons)} grade={this.state.grade} />
     }
 
     toggleCreate() {
@@ -136,7 +139,7 @@ class LessonView extends React.Component {
                   signOut={_.get(this, "firebase.signOut", (() => {})) }
               />
             </div>
-            <Row className={`${this.backgroundColor} nav-top-margin grade-btn-padding`}>
+            <Row className={`${this.state.shouldShowCreateView ? "" : this.backgroundColor} nav-top-margin grade-btn-padding`}>
                 {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
             </Row>
           </div>
