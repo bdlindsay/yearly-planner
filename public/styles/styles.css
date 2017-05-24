@@ -31,6 +31,10 @@
     top: 20%;
 }
 
+.negative-margin {
+    margin-bottom: -10px;
+}
+
 .box-select {
     border-radius: 10px;
     border-width: 1.5px;
@@ -150,7 +154,6 @@
 
 .yellow:hover {
   background-color: #ffd91a;
-
   /*border: 1px solid;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
   outline-color: rgba(255, 255, 255, 0);

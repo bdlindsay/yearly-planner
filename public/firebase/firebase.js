@@ -37,7 +37,7 @@ class Firebase {
     }
 
     authenticate(email, password) {
-        return firebase.auth().signInWithEmailAndPassword(email, password).catch( error => console.log(error))
+        return firebase.auth().signInWithEmailAndPassword(email, password)
     }
 
     signInUser(firebase) {

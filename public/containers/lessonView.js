@@ -28,15 +28,17 @@ class LessonView extends React.Component {
         this.firebase = new Firebase()
         this.firebase.setAuthenticationListener(listener)
 
+        let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         this.state = {
-          currentMonth: "January",
+          currentMonth: monthNames[(new Date()).getMonth()],
           grade: props.params.grade,
           shouldShowCreateView: false,
           lessons: [],
           isSignedIn: this.isSignedIn,
           email: "",
           password: "",
-          hasFailedSignIn: false
+          hasFailedSignIn: false,
+          searchText: ""
         }
 
         switch(this.state.grade) {
@@ -111,11 +113,41 @@ class LessonView extends React.Component {
     }
 
     filteredLessons(lessons) {
-        return _.filter(lessons, lesson => lesson.grade.includes(this.state.grade))
+        const lessonsByGrade = _.filter(this.state.lessons, lesson => lesson.grade.includes(this.state.grade) && lesson.months.includes(this.state.currentMonth))
+        if (_.trim(this.state.searchText) == "") { return lessonsByGrade }
+
+        return _.filter(lessonsByGrade, lesson => {
+            const matchWords = _.words(_.reduce(lesson.curriculum, (curriculumString, curriculumPoint) => {
+                return `${curriculumString} ${curriculumPoint.selectedValues ? curriculumPoint.selectedValues : ""}`
+            }, `${lesson.lessonName} ${lesson.type}`).toLowerCase())
+
+            const searchTextWords = _.words(this.state.searchText.toLowerCase())
+
+            // TODO which is preferred? matchWord.includes(searchTextWord) or
+            let matches = _.filter(matchWords, matchWord => {
+                return _.find(searchTextWords, searchTextWord => _.startsWith(matchWord, searchTextWord)) !== undefined
+            })
+
+            console.log(matches)
+
+            return matches.length > 0
+        })
     }
 
     currentView() {
-        return this.state.shouldShowCreateView ? <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} /> : <LessonTable lessons={this.filteredLessons(this.state.lessons)} grade={this.state.grade} />
+        if (this.state.shouldShowCreateView){
+            return <LessonCreator upload={this.uploadToFirebase} backgroundColor={this.backgroundColor} />
+        } else {
+            return (
+                <LessonTable
+                    lessons={this.filteredLessons()}
+                    grade={this.state.grade}
+                    searchText={this.state.searchText}
+                    handleChange={this.handleChange}
+                    iconColor={this.backgroundColor}
+                 />
+            )
+        }
     }
 
     toggleCreate() {

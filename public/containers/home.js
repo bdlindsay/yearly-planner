@@ -14,10 +14,11 @@ class Home extends React.Component
 
         const listener = (user) => {
             if (user) {
-                console.log("Signed-in!")
 
                 this.isSignedIn = true
-                this.setState({isSignedIn: true})
+                // TODO
+                // console.log("Signed-in!")
+                //this.setState({isSignedIn: true})
             } else {
                 console.log("Signed-out :(")
                 this.isSignedIn = false
@@ -110,7 +111,7 @@ class Home extends React.Component
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(`Login Error: ${errorCode}: ${errorMessage}`)
-                this.setState({ hasFailedSignIn: true, password: "" })
+                this.setState({ hasFailedSignIn: true, password: "", isSignedIn: false })
             })
     }
     // Create view Package
