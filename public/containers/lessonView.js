@@ -208,13 +208,13 @@ class LessonView extends React.Component {
       case 1.9:
         this.setState({currentMonth: "September"})
         break
-      case 1.10:
+      case 1.11:
         this.setState({currentMonth: "October"})
         break
-      case 1.11:
+      case 1.12:
         this.setState({currentMonth: "November"})
         break
-      case 1.12:
+      case 1.13:
         this.setState({currentMonth: "December"})
         break
       default: break

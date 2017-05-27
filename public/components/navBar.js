@@ -16,9 +16,9 @@ const NavBar = ({showMonths, changeMonth, currentMonth, addLessonToggle, addLess
           <MenuItem eventKey={1.7}>July</MenuItem>
           <MenuItem eventKey={1.8}>August</MenuItem>
           <MenuItem eventKey={1.9}>September</MenuItem>
-          <MenuItem eventKey={1.10}>October</MenuItem>
-          <MenuItem eventKey={1.11}>November</MenuItem>
-          <MenuItem eventKey={1.12}>December</MenuItem>
+          <MenuItem eventKey={1.11}>October</MenuItem>
+          <MenuItem eventKey={1.12}>November</MenuItem>
+          <MenuItem eventKey={1.13}>December</MenuItem>
         </NavDropdown>
       )
     }
