@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, Popover, OverlayTrigger, Col, Row, InputGroup, FormControl, Glyphicon, Image } from "react-bootstrap"
+import { Table, Popover, OverlayTrigger, Col, Row, InputGroup, FormControl, Glyphicon, Image, Button } from "react-bootstrap"
 import _ from "lodash"
 
 const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
@@ -16,6 +16,14 @@ const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
           }, "")
       }
 
+      const downloadResourceLinks = (lesson) => {
+          let count = -1
+            return _.map(lesson.files, fileURL => {
+                count++
+                return <Row key={`${count}-${fileURL}`}><a href={fileURL} download={`${lesson.lessonName}`}>Download Resources</a></Row>
+            })
+      }
+
       return _.map(lessons, lesson => {
           let index = 0
           return (
@@ -27,7 +35,7 @@ const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
                     {reduceLessonTypes(lesson, index)}
                 </td>
                 <td>
-                    <Button>Download Resources</Button>
+                    {downloadResourceLinks(lesson)}
                 </td>
               </tr>
           )
@@ -58,6 +66,7 @@ const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
                 <tr>
                   <th>Lesson Name</th>
                   <th>Type</th>
+                  <th>Resources</th>
                 </tr>
               </thead>
               <tbody>

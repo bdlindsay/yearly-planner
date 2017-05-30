@@ -101,7 +101,7 @@ class LessonView extends React.Component {
     uploadToFirebase(uploadObject) {
         console.log("Uploading" + JSON.stringify(uploadObject))
         // TODO callback for when it has successfully uploaded?
-        this.firebase.upload(uploadObject, callback).then(response => {
+        this.firebase.upload(uploadObject).then(response => {
             console.log(response)
             console.log("Successfully uploaded lesson.")
             this.setState({shouldShowCreateView: false})

@@ -1,4 +1,5 @@
 import agent from './agent'
+import _ from "lodash"
 require('firebase/storage')
 require('firebase/auth')
 require('firebase/database')
@@ -48,34 +49,28 @@ class Firebase {
     }
 
     upload(lessonObject) {
-        if (lessonObject.files.length > 0) {
-            const newLessonPath = `lessons/${lessonObject.lessonName}`
-            const blob = new Blob([JSON.stringify(lessonObject.files)], {type : 'application/json'});
+        const newLessonPath = `lessons/${lessonObject.lessonName}`
 
-            const newLessonReference = this.storageReference.child(newLessonPath)
+        const newLessonReference = this.storageReference.child(newLessonPath)
 
-            return newLessonReference.put(blob).then( snapshot => {
-                console.log("Uploaded File", snapshot)
+        let uploads = _.map(lessonObject.files, file => newLessonReference.put(file))
 
-                const dbUploadObject = {...lessonObject, files: snapshot.downloadURL}
+        Promise.all(uploads).then( snapshots => {
+            console.log("Snapshots", snapshots)
+            const downloadURLs = _.map(snapshots, snapshot => snapshot.downloadURL)
 
-                let newPostKey = this.database.ref().child("lessons").push().key
-                let newLesson = {}
-                newLesson[newPostKey] = dbUploadObject
+            console.log(downloadURLs)
 
-                return this.database.ref("lessons/").update(newLesson)
-            }).catch( error => {
-                console.error(error)
-            })
-        } else {
-            const dbUploadObject = {...lessonObject, files: undefined}
-            // TODO upload this object to real-time database with newLessonPath
+            const dbUploadObject = {...lessonObject, files: downloadURLs}
+
             let newPostKey = this.database.ref().child("lessons").push().key
             let newLesson = {}
             newLesson[newPostKey] = dbUploadObject
 
             return this.database.ref("lessons/").update(newLesson)
-        }
+        }).catch( error => {
+            console.error(error)
+        })
     }
 
     downloadLessons() {
