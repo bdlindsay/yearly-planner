@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, Popover, OverlayTrigger, Col, Row, InputGroup, FormControl,Glyphicon } from "react-bootstrap"
+import { Table, Popover, OverlayTrigger, Col, Row, InputGroup, FormControl, Glyphicon, Image } from "react-bootstrap"
 import _ from "lodash"
 
 const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
@@ -25,6 +25,9 @@ const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
                 </OverlayTrigger>
                 <td>
                     {reduceLessonTypes(lesson, index)}
+                </td>
+                <td>
+                    <Button>Download Resources</Button>
                 </td>
               </tr>
           )

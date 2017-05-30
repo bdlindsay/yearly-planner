@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "../styles/styles.css"
 import NavBar from "../components/navBar"
-import { Button, Modal, Row, Col } from "react-bootstrap"
+import { Button, Row, Col } from "react-bootstrap"
 import Firebase from "../firebase/firebase"
 import LessonTable from "../components/LessonTable"
 import LessonCreator from "../components/LessonCreator"
@@ -91,7 +91,6 @@ class LessonView extends React.Component {
             console.log(`${email} was successfully signed-in`)
             this.setState({isSignedIn: true, password: "" })
         }).catch(error => {
-          // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log(`Login Error: ${errorCode}: ${errorMessage}`)
