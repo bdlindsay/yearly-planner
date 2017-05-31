@@ -35,6 +35,14 @@
     margin-bottom: -10px;
 }
 
+.download-link {
+    font-weight: 600;
+}
+
+.download-link:hover {
+    color: rgba(0, 0, 0, 0.7);
+}
+
 .box-select {
     border-radius: 10px;
     border-width: 1.5px;

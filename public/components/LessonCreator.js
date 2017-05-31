@@ -149,7 +149,7 @@ class LessonCreator extends React.Component {
                     console.log("file[" + i + "].name = " + droppedFile.name);
 
                     let newFiles = this.state.files
-                    newFiles.push(droppedFile)
+                    newFiles.push({data: droppedFile, name: droppedFile.name})
                     this.setState({files: newFiles})
                 }
             }

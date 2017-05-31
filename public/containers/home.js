@@ -149,7 +149,7 @@ class Home extends React.Component
     render()
     {
         return (
-            <div>
+            <div className="container-fluid">
                 <div className="row">
                     <NavBar showMonths={false} addLessonToggle={this.toggleCreate} addLessonText={this.buttonText()} isSignedIn={this.state.isSignedIn} signOut={_.get(this, "firebase.signOut", (() => {})) } />
                 </div>

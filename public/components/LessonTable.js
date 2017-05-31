@@ -1,6 +1,7 @@
 import React from "react"
 import { Table, Popover, OverlayTrigger, Col, Row, InputGroup, FormControl, Glyphicon, Image, Button } from "react-bootstrap"
 import _ from "lodash"
+import style from "../styles/styles.css"
 
 const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
   const ciriculumPopover = () => {
@@ -18,9 +19,9 @@ const LessonTable = ({lessons, grade, searchText, handleChange, iconColor}) => {
 
       const downloadResourceLinks = (lesson) => {
           let count = -1
-            return _.map(lesson.files, fileURL => {
+            return _.map(lesson.files, file => {
                 count++
-                return <Row key={`${count}-${fileURL}`}><a href={fileURL} download={`${lesson.lessonName}`}>Download Resources</a></Row>
+                return <Row key={`${count}-${file.name}`}><Col md={12}><a href={file.url} download={file.name} className="download-link">{file.name}</a></Col></Row>
             })
       }
 

@@ -1,4 +1,3 @@
-import agent from './agent'
 import _ from "lodash"
 require('firebase/storage')
 require('firebase/auth')
@@ -49,19 +48,19 @@ class Firebase {
     }
 
     upload(lessonObject) {
-        const newLessonPath = `lessons/${lessonObject.lessonName}`
-
-        const newLessonReference = this.storageReference.child(newLessonPath)
-
-        let uploads = _.map(lessonObject.files, file => newLessonReference.put(file))
+        const uploads = _.map(lessonObject.files, file => {
+            const newLessonPath = `lessons/${lessonObject.lessonName}-${file.name}`
+            const newLessonReference = this.storageReference.child(newLessonPath)
+            return newLessonReference.put(file.data)
+        })
 
         Promise.all(uploads).then( snapshots => {
             console.log("Snapshots", snapshots)
-            const downloadURLs = _.map(snapshots, snapshot => snapshot.downloadURL)
+            const downloadURLs = _.map(snapshots, snapshot => { return {url: snapshot.downloadURL, name: snapshot.ref.name} })
 
             console.log(downloadURLs)
 
-            const dbUploadObject = {...lessonObject, files: downloadURLs}
+            const dbUploadObject = Object.assign(lessonObject, { files: downloadURLs })
 
             let newPostKey = this.database.ref().child("lessons").push().key
             let newLesson = {}
