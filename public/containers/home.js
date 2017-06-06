@@ -153,11 +153,14 @@ class Home extends React.Component
                 <div className="row">
                     <NavBar showMonths={false} addLessonToggle={this.toggleCreate} addLessonText={this.buttonText()} isSignedIn={this.state.isSignedIn} signOut={_.get(this, "firebase.signOut", (() => {})) } />
                 </div>
-                {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange}
-                attemptSignIn={this.signInWithEmailAndPassword}
-                hasFailedSignIn={this.state.hasFailedSignIn}
-                dropConfig={this.dropConfig}
-                hasConfig={this.state.configFile}/>}
+                {this.state.isSignedIn ? this.currentView() : <Login
+                    handleChange={this.handleChange}
+                    attemptSignIn={this.signInWithEmailAndPassword}
+                    hasFailedSignIn={this.state.hasFailedSignIn}
+                    dropConfig={this.dropConfig}
+                    hasConfig={this.state.configFile}
+                    />
+                }
             </div>
         )
     }

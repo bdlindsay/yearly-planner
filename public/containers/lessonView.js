@@ -38,7 +38,8 @@ class LessonView extends React.Component {
           email: "",
           password: "",
           hasFailedSignIn: false,
-          searchText: ""
+          searchText: "",
+          shouldShowDetails: false
         }
 
         switch(this.state.grade) {
@@ -70,6 +71,8 @@ class LessonView extends React.Component {
         // TODO redirects?
         this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleToggle = this.handleToggle.bind(this)
+        this.tableRowSelected = this.tableRowSelected.bind(this)
         this.filteredLessons = this.filteredLessons.bind(this)
     }
 
@@ -84,6 +87,16 @@ class LessonView extends React.Component {
         let change = {}
         change[stateVariable] = target.value
         this.setState(change)
+    }
+
+    handleToggle(stateVariable) {
+        let change = {}
+        change[stateVariable] = !this.state[stateVariable]
+        this.setState(change)
+    }
+
+    tableRowSelected(lesson, event) {
+        this.setState({selectedLesson: lesson, shouldShowDetails: true})
     }
 
     signInWithEmailAndPassword() {
@@ -144,6 +157,10 @@ class LessonView extends React.Component {
                     searchText={this.state.searchText}
                     handleChange={this.handleChange}
                     iconColor={this.backgroundColor}
+                    shouldShowDetails={this.state.shouldShowDetails}
+                    handleToggle={this.handleToggle}
+                    tableRowSelected={this.tableRowSelected}
+                    selectedLesson={this.state.selectedLesson}
                  />
             )
         }
