@@ -13,16 +13,16 @@ class LessonView extends React.Component {
         super()
 
         const listener = (user) => {
-          if (user) {
-            console.log("Signed-in!")
-            //console.log(user)
-            this.isSignedIn = true
-            this.setState({isSignedIn: true})
-          } else {
-            console.log("Signed-out :(")
-            this.isSignedIn = false
-            this.setState({isSignedIn: false, shouldShowCreateView: false})
-          }
+            if (user) {
+                console.log("Signed-in!")
+                //console.log(user)
+                this.isSignedIn = true
+                this.setState({isSignedIn: true})
+            } else {
+                console.log("Signed-out :(")
+                this.isSignedIn = false
+                this.setState({isSignedIn: false, shouldShowCreateView: false})
+            }
         }
 
         this.firebase = new Firebase()
@@ -30,37 +30,37 @@ class LessonView extends React.Component {
 
         let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         this.state = {
-          currentMonth: monthNames[(new Date()).getMonth()],
-          grade: props.params.grade,
-          shouldShowCreateView: false,
-          lessons: [],
-          isSignedIn: this.isSignedIn,
-          email: "",
-          password: "",
-          hasFailedSignIn: false,
-          searchText: "",
-          shouldShowDetails: false
+            currentMonth: monthNames[(new Date()).getMonth()],
+            grade: props.params.grade,
+            shouldShowCreateView: false,
+            lessons: [],
+            isSignedIn: this.isSignedIn,
+            email: "",
+            password: "",
+            hasFailedSignIn: false,
+            searchText: "",
+            shouldShowDetails: false
         }
 
         switch(this.state.grade) {
-          case "Kindergarten":
-            this.backgroundColor = "light-yellow"
-            break
-          case "1stGrade":
-            this.backgroundColor = "light-green"
-            break
-          case "2ndGrade":
-            this.backgroundColor = "light-orange"
-            break
-          case "3rdGrade":
-            this.backgroundColor = "light-red"
-            break
-          case "4thGrade":
-            this.backgroundColor = "light-purple"
-            break
-          case "5thGrade":
-            this.backgroundColor = "light-blue"
-            break
+            case "Kindergarten":
+                this.backgroundColor = "light-yellow"
+                break
+            case "1stGrade":
+                this.backgroundColor = "light-green"
+                break
+            case "2ndGrade":
+                this.backgroundColor = "light-orange"
+                break
+            case "3rdGrade":
+                this.backgroundColor = "light-red"
+                break
+            case "4thGrade":
+                this.backgroundColor = "light-purple"
+                break
+            case "5thGrade":
+                this.backgroundColor = "light-blue"
+                break
         }
 
         this.changeMonth = this.changeMonth.bind(this)
@@ -104,10 +104,10 @@ class LessonView extends React.Component {
             console.log(`${email} was successfully signed-in`)
             this.setState({isSignedIn: true, password: "" })
         }).catch(error => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(`Login Error: ${errorCode}: ${errorMessage}`)
-          this.setState({ hasFailedSignIn: true, password: "" })
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(`Login Error: ${errorCode}: ${errorMessage}`)
+            this.setState({ hasFailedSignIn: true, password: "" })
         })
     }
 
@@ -125,7 +125,7 @@ class LessonView extends React.Component {
     }
 
     filteredLessons(lessons) {
-        const lessonsByGrade = _.filter(this.state.lessons, lesson => lesson.grade.includes(this.state.grade) && lesson.months.includes(this.state.currentMonth))
+        const lessonsByGrade = _.filter(this.state.lessons, lesson => lesson.grade.includes(this.state.grade) && (lesson.months.includes(this.state.currentMonth) || this.state.currentMonth == "All"))
         if (_.trim(this.state.searchText) == "") { return lessonsByGrade }
 
         return _.filter(lessonsByGrade, lesson => {
@@ -161,7 +161,7 @@ class LessonView extends React.Component {
                     handleToggle={this.handleToggle}
                     tableRowSelected={this.tableRowSelected}
                     selectedLesson={this.state.selectedLesson}
-                 />
+                    />
             )
         }
     }
@@ -176,66 +176,69 @@ class LessonView extends React.Component {
 
     render() {
         return (
-          <div>
-            <div className="row">
-              <NavBar showMonths={!this.state.shouldShowCreateView}
-                  changeMonth={this.changeMonth}
-                  currentMonth={this.state.currentMonth}
-                  addLessonToggle={this.toggleCreate}
-                  addLessonText={this.buttonText()}
-                  isSignedIn={this.state.isSignedIn}
-                  signOut={_.get(this, "firebase.signOut", (() => {})) }
-              />
+            <div>
+                <div className="row">
+                    <NavBar showMonths={!this.state.shouldShowCreateView}
+                        changeMonth={this.changeMonth}
+                        currentMonth={this.state.currentMonth}
+                        addLessonToggle={this.toggleCreate}
+                        addLessonText={this.buttonText()}
+                        isSignedIn={this.state.isSignedIn}
+                        signOut={_.get(this, "firebase.signOut", (() => {})) }
+                        />
+                </div>
+                <Row className={`${this.state.shouldShowCreateView ? "" : this.backgroundColor} nav-top-margin grade-btn-padding`}>
+                    {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
+                </Row>
             </div>
-            <Row className={`${this.state.shouldShowCreateView ? "" : this.backgroundColor} nav-top-margin grade-btn-padding`}>
-                {this.state.isSignedIn ? this.currentView() : <Login handleChange={this.handleChange} attemptSignIn={this.signInWithEmailAndPassword} hasFailedSignIn={this.state.hasFailedSignIn} />}
-            </Row>
-          </div>
         )
     }
 
-  changeMonth(eventKey) {
-    console.log(eventKey)
-    switch (eventKey) {
-      case 1.1:
-        this.setState({currentMonth: "January"})
-        break
-      case 1.2:
-        this.setState({currentMonth: "February"})
-        break
-      case 1.3:
-        this.setState({currentMonth: "March"})
-        break
-      case 1.4:
-        this.setState({currentMonth: "April"})
-        break
-      case 1.5:
-        this.setState({currentMonth: "May"})
-        break
-      case 1.6:
-        this.setState({currentMonth: "June"})
-        break
-      case 1.7:
-        this.setState({currentMonth: "July"})
-        break
-      case 1.8:
-        this.setState({currentMonth: "August"})
-        break
-      case 1.9:
-        this.setState({currentMonth: "September"})
-        break
-      case 1.11:
-        this.setState({currentMonth: "October"})
-        break
-      case 1.12:
-        this.setState({currentMonth: "November"})
-        break
-      case 1.13:
-        this.setState({currentMonth: "December"})
-        break
-      default: break
+    changeMonth(eventKey) {
+        console.log(eventKey)
+        switch (eventKey) {
+            case "All":
+                this.setState({currentMonth: "All"})
+                break
+            case "January":
+                this.setState({currentMonth: "January"})
+                break
+            case "February":
+                this.setState({currentMonth: "February"})
+                break
+            case "March":
+                this.setState({currentMonth: "March"})
+                break
+            case "April":
+                this.setState({currentMonth: "April"})
+                break
+            case "May":
+                this.setState({currentMonth: "May"})
+                break
+            case "June":
+                this.setState({currentMonth: "June"})
+                break
+            case "July":
+                this.setState({currentMonth: "July"})
+                break
+            case "August":
+                this.setState({currentMonth: "August"})
+                break
+            case "September":
+                this.setState({currentMonth: "September"})
+                break
+            case "October":
+                this.setState({currentMonth: "October"})
+                break
+            case "November":
+                this.setState({currentMonth: "November"})
+                break
+            case "December":
+                this.setState({currentMonth: "December"})
+                break
+            default: break
+        }
     }
-  }
 }
 
 export default LessonView

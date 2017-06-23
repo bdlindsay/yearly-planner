@@ -14,11 +14,7 @@ class Home extends React.Component
 
         const listener = (user) => {
             if (user) {
-
                 this.isSignedIn = true
-                // TODO
-                // console.log("Signed-in!")
-                //this.setState({isSignedIn: true})
             } else {
                 console.log("Signed-out :(")
                 this.isSignedIn = false
